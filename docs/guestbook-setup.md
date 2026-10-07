@@ -70,3 +70,8 @@ SQL Editor의 새 쿼리에서 `supabase/migrations/202610070002_guestbook_repli
 이 구성은 공개 익명 방명록이며 서버 측 스팸 차단이나 요청 횟수 제한은 포함하지 않습니다. 공개 범위와 사용량을 확인하고, 방문자가 많아지면 CAPTCHA·인증·쓰기 제한을 추가하는 것이 좋습니다.
 
 공식 참고: [행 수준 보안](https://supabase.com/docs/guides/database/postgres/row-level-security), [실시간 변경 구독](https://supabase.com/docs/guides/realtime/postgres-changes).
+# 랜덤 미니미 추가
+
+Supabase SQL Editor에서 `supabase/migrations/202610070003_guestbook_minimi.sql`을 실행합니다. 기존 글은 유지하고 미니미 외형을 재현하는 정수 값만 추가 저장합니다. 추가 이미지 서버는 필요하지 않습니다.
+
+작성란의 **주사위 돌리기**를 누르면 픽셀 미니미의 머리·피부·의상·액세서리와 장식용 능력치가 바뀝니다. **작성하기**를 누르면 선택한 미니미와 메모가 함께 저장되어 다른 방문자에게도 같은 모습으로 보입니다. 이전 글에는 미니미를 임의로 붙이지 않습니다.

@@ -3,12 +3,13 @@ import { supabaseUrl as url, supabasePublishableKey as key } from './supabase-co
 import './guestbook.css'
 import { mountStickers } from './guestbook-stickers'
 import { createReplies } from './guestbook-replies'
+import { minimi, mountMinimi } from './guestbook-minimi'
 
 const colors = ['butter', 'rose', 'mint', 'sky', 'lavender'] as const
 const colorNames = ['버터 옐로', '로즈 핑크', '민트', '하늘색', '라벤더']
-type Entry = { id: string; author: string; message: string; color: string; created_at: string }
+type Entry = { id: string; author: string; message: string; color: string; created_at: string; minimi_seed?: number | null }
 const pageSize = 30
-const fields = 'id,author,message,color,created_at'
+const fields = '*'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="guest-header">
@@ -38,6 +39,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
           <fieldset id="write-fields" disabled>
             <label for="guest-name">ScreenName <span>이름 또는 별명</span></label>
             <input id="guest-name" name="author" maxlength="30" required autocomplete="nickname" placeholder="너의 이름은?" />
+            <div id="minimi-maker" class="minimi-maker"></div>
             <label for="guest-message">Message <span>하고 싶은 말</span></label>
             <textarea id="guest-message" name="message" rows="7" maxlength="500" required placeholder="오늘의 조각을 여기에… ♡"></textarea>
             <div class="message-count"><span>모두에게 공개되는 글이에요.</span><span id="char-count">0 / 500</span></div>
@@ -77,6 +79,7 @@ let cursor: Entry | undefined
 let loading = false
 let saving = false
 let draftId: string | undefined
+const getMinimiSeed = mountMinimi(el('minimi-maker'), () => { draftId = undefined; formStatus.textContent = '' })
 
 function isEntry(row: unknown): row is Entry {
   if (!row || typeof row !== 'object') return false
@@ -121,7 +124,9 @@ function merge(rows: unknown[], animate = false) {
       chrome.setAttribute('aria-hidden', 'true')
       chrome.textContent = '— □ ×'
       title.append(filename, chrome)
-      note.append(title, text, bottom)
+      note.append(title)
+      if (Number.isInteger(row.minimi_seed) && row.minimi_seed! >= 0 && row.minimi_seed! <= 2147483647) note.append(minimi(row.minimi_seed!))
+      note.append(text, bottom)
       attachReplies?.(note, row.id)
       nodes.set(row.id, note)
     }
@@ -211,7 +216,11 @@ form.addEventListener('submit', async event => {
   writeFields.disabled = true
   formStatus.textContent = '포스트잇을 붙이고 있어요…'
   try {
-    let { data, error } = await supabase.from('guestbook_entries').insert({ id, author, message, color }).select(fields).abortSignal(AbortSignal.timeout(15000)).single()
+    let { data, error } = await supabase.from('guestbook_entries').insert({ id, author, message, color, minimi_seed: getMinimiSeed() }).select(fields).abortSignal(AbortSignal.timeout(15000)).single()
+    if (error?.code === 'PGRST204' || error?.code === '42501') {
+      formStatus.textContent = '미니미 저장 설정이 필요해요. 관리자가 추가 SQL(202610070003_guestbook_minimi.sql)을 실행한 뒤 다시 작성해주세요. 입력은 유지돼요.'
+      return
+    }
     // Retrying an uncertain network response uses the same id, so it cannot post twice.
     if (error?.code === '23505') {
       const existing = await supabase.from('guestbook_entries').select(fields).eq('id', id).abortSignal(AbortSignal.timeout(15000)).single()

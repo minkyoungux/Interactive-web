@@ -1,0 +1,14 @@
+.minimi-maker { margin: 16px 0; padding: 3px 3px 12px; background: #e1dcea; box-shadow: var(--inset); text-align: center; }
+.minimi-title { padding: 7px; background: linear-gradient(90deg,#58519c,#ae91c9); color: white; text-align: left; font: bold 12px Tahoma,sans-serif; }
+.minimi-title span { float: right; font-size: 8px; padding-top: 3px; }
+.minimi-preview { margin: 10px; padding: 6px; background-color: #f4eefb; background-image: linear-gradient(#fff8 1px,transparent 1px),linear-gradient(90deg,#fff8 1px,transparent 1px); background-size: 14px 14px; border: 1px solid #beb1d0; }
+.minimi svg { width: 112px; height: 133px; display: block; margin: auto; image-rendering: pixelated; }
+.minimi-stats { display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; font: bold 10px monospace; color: #665383; }
+.minimi-stats span { padding: 4px 5px; background: #fff9; border: 1px solid #c8b9d6; }
+.minimi-roll { padding: 9px 22px; background: #c0c0c0; border: 0; box-shadow: var(--outset); color: #443565; font: bold 12px Tahoma,sans-serif; cursor: pointer; }
+.minimi-roll:active { box-shadow: var(--inset); }.minimi-roll:disabled { opacity: .5; cursor: wait; }
+.minimi-hint { margin: 10px 8px 0; font-size: 10px; line-height: 1.6; color: #6b567b; }
+.note > .minimi { margin: 12px 14px 0; padding: 7px; border: 1px dashed #ab91bd; background: #fff5; }.note > .minimi svg { width: 88px; height: 104px; }
+.is-rolling svg { animation: minimi-roll .4s steps(4); }
+@keyframes minimi-roll { 25% { transform: rotate(-10deg) translateY(-6px); } 75% { transform: rotate(10deg) translateY(-4px); } }
+@media (prefers-reduced-motion: reduce) { .is-rolling svg { animation: none; } }
