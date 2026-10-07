@@ -1,4 +1,12 @@
 .minimi-maker { margin: 16px 0; padding: 3px 3px 12px; background: #e1dcea; box-shadow: var(--inset); text-align: center; }
+.minimi .minimi-selected-art { width: 120px; height: 176px; image-rendering: auto; }
+.note > .minimi .minimi-selected-art { width: 96px; height: 141px; }
+.plaza-person .minimi .minimi-selected-art { width: 64px; height: 94px; }
+.minimi-selected-art > svg { width: 100% !important; height: 100% !important; animation: none !important; }
+.plaza-person .minimi { transition: transform .2s; }
+.plaza-person.is-curious .minimi { transform: rotate(var(--head-angle,0deg)); }
+.plaza-person.is-startled .minimi { transform: translateY(-3px) rotate(-4deg); }
+@media(prefers-reduced-motion:reduce) { .plaza-person .minimi { transform: none !important; transition: none !important; } }
 .minimi-title { padding: 7px; background: linear-gradient(90deg,#58519c,#ae91c9); color: white; text-align: left; font: bold 12px Tahoma,sans-serif; }
 .minimi-title span { float: right; font-size: 8px; padding-top: 3px; }
 .minimi-preview { margin: 10px; padding: 6px; background-color: #f4eefb; background-image: linear-gradient(#fff8 1px,transparent 1px),linear-gradient(90deg,#fff8 1px,transparent 1px); background-size: 14px 14px; border: 1px solid #beb1d0; }

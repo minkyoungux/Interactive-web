@@ -1,34 +1,29 @@
 import './guestbook-minimi.css'
 
 export function randomSeed() {
-  return crypto.getRandomValues(new Uint32Array(1))[0] & 0x7fffffff
+  // Small catalogue IDs keep new selections stable; older random seeds retain their trio mapping.
+  return crypto.getRandomValues(new Uint32Array(1))[0] % 8
 }
 
 export function minimi(seed: number): HTMLElement {
   let state = seed >>> 0
   const pick = (n: number) => { state = (Math.imul(state, 1664525) + 1013904223) >>> 0; return Math.floor(state / 4294967296 * n) }
-  const skin = ['#ffe0c4', '#efbc96', '#cb926c', '#895b49'][pick(4)]
-  const hair = ['#473451', '#945940', '#f4ce74', '#e8aed0', '#88bbc9', '#aca2dd'][pick(6)]
-  const outfit = ['#f28fbc', '#85ccdf', '#b9a0e4', '#a6d995', '#f1ce78', '#657dd0'][pick(6)]
-  const style = pick(4), accessory = pick(4), eyes = pick(3)
+  // Advance the original six appearance draws so saved ability scores stay stable.
+  for (const n of [4,6,6,4,4,3]) pick(n)
   const stats = ['STR', 'DEX', 'INT', 'LUK'].map(label => `${label} ${4 + pick(10)}`)
-  const hairShapes = [
-    '<path d="M17 16h30v12H17zM13 24h7v25h-7zM44 24h7v25h-7z"/>',
-    '<path d="M16 18h32v12H16zM20 12h8v10h-8zM32 10h10v12H32z"/>',
-    '<path d="M17 17h30v12H17zM10 22h9v19h-9zM45 22h9v19h-9z"/>',
-    '<path d="M15 19h34v13H15zM19 14h26v8H19zM15 29h6v9h-6z"/>',
-  ]
-  const accessories = [
-    '', '<path fill="#fff1a8" d="M40 12h4v4h4v4h-4v4h-4v-4h-4v-4h4z"/>',
-    '<path fill="#f98fba" d="M14 14h8v4h5v-4h8v10h-8v-3h-5v3h-8z"/>',
-    '<path fill="#d6eaff" d="M17 29h12v8H17zM35 29h12v8H35z"/><path stroke="#655475" stroke-width="2" fill="none" d="M17 29h12v8H17zM35 29h12v8H35zM29 32h6"/>',
-  ]
-  const face = eyes === 0 ? '<path d="M24 30h3v5h-3zM37 30h3v5h-3z"/>' : eyes === 1 ? '<path d="M23 32h5v2h-5zM36 32h5v2h-5z"/>' : '<path d="M24 30h3v5h-3zM36 32h5v2h-5z"/>'
   const root = document.createElement('div')
   root.className = 'minimi'
   root.dataset.seed = String(seed)
-  // All SVG fragments and colors are internal constants, never visitor markup.
-  root.innerHTML = `<svg viewBox="0 0 64 76" role="img" aria-label="랜덤 픽셀 미니미" shape-rendering="crispEdges"><ellipse cx="32" cy="70" rx="23" ry="4" fill="#70558d" opacity=".15"/><path fill="#534360" d="M22 58h8v11H20v-5h2zM34 58h8v6h2v5H34z"/><path fill="${outfit}" d="M22 43h20v19H22zM17 46h5v11h-5zM42 46h5v11h-5z"/><path fill="${skin}" d="M16 54h6v6h-6zM42 54h6v6h-6zM27 39h10v8H27zM18 22h28v17h-4v5H22v-5h-4z"/><g fill="${hair}">${hairShapes[style]}</g><g fill="#423249">${face}</g><path fill="#ea95a0" d="M20 36h6v3h-6zM38 36h6v3h-6z"/><path fill="#ac626d" d="M29 38h6v2h-6z"/><path fill="#fff4dc" d="M27 48h10v3H27zM30 51h4v6h-4z"/>${accessories[accessory]}</svg><div class="minimi-stats">${stats.map(s => `<span>${s}</span>`).join('')}</div>`
+  const look = seed >= 0 && seed < 8 ? seed : (seed >>> 0) % 3
+  const labels = ['긴 머리 · 핑크 카디건', '단발 · 하늘색 후드', '양갈래 · 라벤더 리본', '데이지 · 민트 가디건', '땋은 머리 · 데님 멜빵', '파란 리본 · 세일러', '안경 · 피치 후드', '베레모 · 라일락 원피스']
+  const crops = ['45 145 435 750', '545 145 400 750', '995 145 515 750']
+  const files = ['mint', 'denim', 'navy', 'peach', 'lilac']
+  root.dataset.look = String(look)
+  // Viewport crops the approved sheet without redrawing its characters.
+  const sprite = look < 3
+    ? `<svg width="515" height="750" viewBox="${crops[look]}" overflow="hidden"><image href="${import.meta.env.BASE_URL}minimi/selected-trio-v1.png" width="1536" height="1024" /></svg>`
+    : `<svg width="515" height="750" viewBox="240 70 800 1160" overflow="hidden"><image href="${import.meta.env.BASE_URL}minimi/${files[look - 3]}-v1.png" width="1280" height="1280" /></svg>`
+  root.innerHTML = `<svg class="minimi-selected-art" viewBox="0 0 515 750" role="img" aria-label="${labels[look]}">${sprite}</svg><div class="minimi-stats">${stats.map(s => `<span>${s}</span>`).join('')}</div>`
   return root
 }
 
@@ -52,7 +47,9 @@ export function mountMinimi(host: HTMLElement, changed: () => void) {
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
     let step = 0
     const finish = () => {
-      seed = randomSeed(); render(); changed()
+      const previousSeed = seed
+      do { seed = randomSeed() } while (seed === previousSeed)
+      render(); changed()
       rolling = false; button.disabled = false; host.setAttribute('aria-busy', 'false')
       preview.classList.remove('is-rolling'); button.classList.remove('is-rolling')
       dice.textContent = ['⚀','⚁','⚂','⚃','⚄','⚅'][seed % 6]

@@ -1,0 +1,6 @@
+.cursor-stardust { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1000; pointer-events: none; }
+.stardust-toggle { flex-shrink: 0; padding: 7px 9px; background: #efe0f4; color: #664b86; border: 0; box-shadow: var(--outset); font: 10px Tahoma,sans-serif; }
+.stardust-toggle[aria-pressed=false] { background: #d2d0d8; color: #615e6c; }
+.guest-header .back-link { margin-left: auto; }
+@media(max-width:560px) { .guest-header { flex-wrap: wrap; gap: 8px; }.stardust-toggle { font-size: 9px; padding: 6px; } }
+@media(prefers-reduced-motion:reduce) { .cursor-stardust { display: none; } }

@@ -1,0 +1,11 @@
+Generated using the built-in image_gen tool (not CLI).
+Reference: selected-trio-v1.png, user-approved second minimi concept.
+Output files: mint-v1.png, denim-v1.png, navy-v1.png, peach-v1.png, lilac-v1.png.
+Shared prompt: Create ONE NEW full-body Korean early-2000s mini-homepage pixel minimi, NOT a sheet. Match reference pixel craftsmanship, large head about 43% height, tiny body, very short legs, dark little eyes, stepped pixel outlines and lovingly detailed clothing. Exactly one character, centered, full hair and shoes visible. Square output with actual transparent alpha background, no backdrop, no glow or shadows, no text, no labels. Keep reference quality and cute anatomy, no photorealism or vector, no props or extra characters.
+mint: Mint knit cardigan, ivory shorts, white socks and mint sneakers. Short wavy honey-blonde hair, small daisy hair clip, happy soft smile.
+denim: Dark blue denim overalls over white and pink striped tee, pink sneakers. Warm brown braided hair with two small pink bows, gentle smile.
+navy: Navy sailor-collar top, pleated sky-blue skirt, white socks and navy Mary Jane shoes. Straight black shoulder-length hair with wispy bangs and a blue ribbon.
+peach: Peach oversized zip hoodie, cuffed charcoal trousers, white chunky sneakers. Short fluffy chestnut hair, round thin glasses, shy friendly expression.
+lilac: Lilac beret, white blouse and lavender pinafore dress, ankle socks and lavender shoes. Long dark-plum wavy hair, tiny star hairpin, one hand gently waving.
+Rendering uses the original PNG files through SVG viewports; no sprite repainting.
+Seeds 0-7 select the eight catalogue outfits. Older larger seeds keep their original modulo-3 mapping. No database migration required.

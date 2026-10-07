@@ -1,0 +1,8 @@
+body .note:nth-child(n) { transform: perspective(850px) rotateX(var(--paper-x,0deg)) rotateY(var(--paper-y,0deg)) scale(var(--paper-press,1)); transform-origin: center; transition: transform .5s cubic-bezier(.2,1.65,.35,1),box-shadow .3s; }
+body .note.paper-touch { transition-duration: .14s; box-shadow: 2px 7px 13px #65506a16; }
+.minimi-head { transform: translateX(var(--head-x,0px)) rotate(var(--head-angle,0deg)); transform-origin: 32px 44px; transition: transform .16s ease-out; }
+.minimi-gaze { transform: translate(var(--gaze-x,0px),var(--gaze-y,0px)); transition: transform .12s ease-out; }
+.plaza-person.is-curious .plaza-greeting,.plaza-person.is-startled .plaza-greeting { display: block; }
+.plaza-person.is-startled .minimi-body { transform: translateY(-2px); }
+.plaza-person.is-startled .minimi-head { transform: translateY(-3px) rotate(-6deg); }
+@media(prefers-reduced-motion:reduce) { body .note:nth-child(n) { transform: none; transition: none; }.minimi-head,.minimi-gaze { transform: none; transition: none; } }

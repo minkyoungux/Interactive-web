@@ -5,14 +5,29 @@ type Resident = { id: string; author: string; minimi_seed?: number | null }
 export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
   host.innerHTML = '<div class="plaza-title"><b>♡ Minimi Plaza.exe</b><button type="button" class="plaza-pause" aria-pressed="false">산책 멈추기</button></div><div class="plaza-scene"><div class="plaza-decor" aria-hidden="true"><span>✧</span><b>HELLO, LITTLE WORLD!</b><span>✧</span></div><p class="plaza-empty">미니미와 첫 메모를 남기면 이곳에 놀러 와요 ♡</p><div class="plaza-residents"></div></div><p class="plaza-caption">미니미를 누르면 그 친구의 메모로 이동해요.</p>'
   const stage = host.querySelector<HTMLElement>('.plaza-residents')!
-  host.querySelector('.plaza-title b')!.textContent = 'Mini room · 오늘도 여기서 만나'
-  host.querySelector('.plaza-decor')!.innerHTML = '<div class="room-window"><i></i><span>☁</span></div><div class="room-frame">home<br>sweet<br>home ♡</div><div class="room-shelf"><span>▥ ▥ ▥</span><i>✿</i></div><div class="room-sofa"><i></i><i></i></div><div class="room-rug"></div><div class="room-plant">✿<i></i></div><div class="room-table"><span>♡</span></div>'
   const empty = host.querySelector<HTMLElement>('.plaza-empty')!
   const pause = host.querySelector<HTMLButtonElement>('.plaza-pause')!
   const motion = matchMedia('(prefers-reduced-motion: reduce)')
+  const scene = host.querySelector<HTMLElement>('.plaza-scene')!
+  const pointer = { x: 0, y: 0, active: false, time: 0, speed: 0, since: 0 }
+  scene.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse') return
+    const now = performance.now()
+    pointer.speed = pointer.active ? Math.hypot(e.clientX - pointer.x, e.clientY - pointer.y) / Math.max(16, now - pointer.time) : 0
+    if (!pointer.active) pointer.since = now
+    pointer.x = e.clientX; pointer.y = e.clientY; pointer.time = now; pointer.active = true
+  })
+  scene.addEventListener('pointerleave', () => { pointer.active = false })
   let paused = motion.matches, visible = true, frame = 0, last = 0
-  const people = new Map<string, { button: HTMLButtonElement; x: number; y: number; dx: number; dy: number; remaining: number; hovering: boolean }>()
-  const syncPause = () => { pause.textContent = paused ? '산책 시작하기' : '산책 멈추기'; pause.setAttribute('aria-pressed', String(paused)); host.classList.toggle('is-paused', paused) }
+  const people = new Map<string, { button: HTMLButtonElement; x: number; y: number; dx: number; dy: number; remaining: number; hovering: boolean; fear: number; cooldown: number }>()
+  const syncPause = () => {
+    pause.textContent = paused ? '산책 시작하기' : '산책 멈추기'; pause.setAttribute('aria-pressed', String(paused)); host.classList.toggle('is-paused', paused)
+    if (paused) for (const p of people.values()) {
+      p.button.classList.remove('is-curious', 'is-startled'); p.fear = 0
+      for (const key of ['--gaze-x','--gaze-y','--head-x','--head-angle']) p.button.style.removeProperty(key)
+      p.button.querySelector('.plaza-greeting')!.textContent = '안녕! 내 메모 볼래? ♡'
+    }
+  }
   pause.onclick = () => { paused = !paused; syncPause() }
   const preference = () => { paused = motion.matches; syncPause() }
   motion.addEventListener('change', preference)
@@ -21,8 +36,33 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
   observer.observe(host)
   function tick(now: number) {
     const dt = Math.min((now - last) / 1000, .05); last = now
+    const area = stage.getBoundingClientRect()
     if (visible && !paused && !document.hidden) for (const p of people.values()) {
-      if (p.hovering || p.button.matches(':focus-visible')) continue
+      const vx = pointer.x - (area.left + area.width * p.x / 100)
+      const vy = pointer.y - (area.top + area.height * p.y / 100 + 35)
+      const distance = Math.hypot(vx, vy)
+      const near = pointer.active && distance < 150 && !motion.matches
+      const greeting = p.button.querySelector<HTMLElement>('.plaza-greeting')!
+      if (near && pointer.speed > .9 && now - pointer.time < 90 && now > p.cooldown) {
+        p.fear = now + 700; p.cooldown = now + 1700
+        p.dx = -vx / Math.max(distance, 1) * 24; p.dy = -vy / Math.max(distance, 1) * 34
+        p.remaining = 1.4
+      }
+      const scared = now < p.fear
+      p.button.classList.toggle('is-startled', scared)
+      p.button.classList.toggle('is-curious', near && !scared)
+      p.button.style.setProperty('--gaze-x', near ? `${Math.max(-1.3, Math.min(1.3, vx / 35))}px` : '0px')
+      p.button.style.setProperty('--gaze-y', near ? `${Math.max(-.7, Math.min(.7, vy / 65))}px` : '0px')
+      p.button.style.setProperty('--head-x', near ? `${Math.sign(vx)}px` : '0px')
+      p.button.style.setProperty('--head-angle', near ? `${Math.max(-5, Math.min(5, vx / 15))}deg` : '0deg')
+      greeting.textContent = scared ? '앗, 깜짝이야…!' : near ? '뭐 하고 있어? ♡' : '안녕! 내 메모 볼래? ♡'
+      if ((p.hovering && !scared) || p.button.matches(':focus-visible')) continue
+      if (near && !scared) {
+        if (now - pointer.since > 550 && distance > 65) {
+          p.dx = vx / distance * 3; p.dy = vy / distance * 6
+        } else { p.dx = 0; p.dy = 0 }
+        p.remaining = .3
+      }
       p.remaining -= dt
       if (p.remaining <= 0) {
         const angle = Math.random() * Math.PI * 2
@@ -53,7 +93,7 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
       const name = document.createElement('span'); name.className = 'plaza-name'; name.textContent = row.author
       const greeting = document.createElement('span'); greeting.className = 'plaza-greeting'; greeting.textContent = '안녕! 내 메모 볼래? ♡'
       button.append(greeting, avatar, name)
-      const p = { button, x: 5 + Math.random() * 90, y: Math.random() * 90, dx: 0, dy: 0, remaining: 0, hovering: false }
+      const p = { button, x: 5 + Math.random() * 90, y: Math.random() * 90, dx: 0, dy: 0, remaining: 0, hovering: false, fear: 0, cooldown: 0 }
       button.style.left = `${p.x}%`; button.style.top = `${p.y}%`
       button.onpointerenter = () => { p.hovering = true }
       button.onpointerleave = () => { p.hovering = false }

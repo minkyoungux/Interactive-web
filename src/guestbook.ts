@@ -5,7 +5,8 @@ import { mountStickers } from './guestbook-stickers'
 import { createReplies } from './guestbook-replies'
 import { minimi, mountMinimi } from './guestbook-minimi'
 import { mountPlaza } from './guestbook-plaza'
-import './guestbook-home.css'
+import { mountPaperTouch } from './guestbook-touch'
+import { mountStardust } from './guestbook-stardust'
 
 const colors = ['butter', 'rose', 'mint', 'sky', 'lavender'] as const
 const colorNames = ['버터 옐로', '로즈 핑크', '민트', '하늘색', '라벤더']
@@ -19,22 +20,24 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <a class="back-link" href="${import.meta.env.BASE_URL}">작품으로 돌아가기 <span aria-hidden="true">↗</span></a>
   </header>
   <main>
-    <aside class="intro" aria-label="미니홈피 프로필">
-      <div class="profile-date">MY LITTLE CORNER <span>♡</span></div>
-      <div class="profile-photo"><div id="profile-avatar"></div><span class="photo-sticker">hello,<br>friend!</span></div>
-      <p class="profile-mood">오늘의 기분 <b>말랑말랑 ☁</b></p>
-      <h1>민경의 작은 방</h1><p class="profile-description">별일 없는 하루도<br>여기서는 반짝였으면.<br><br>잠깐 쉬었다 가요.<br>우리의 작고 다정한 인터넷 ♡</p>
-      <div class="profile-sign">minkyoung <span>✧</span></div>
-      <div class="profile-links"><a href="#minimi-plaza">⌂ 나의 미니룸</a><a href="#guest-name">✎ 흔적 남기기</a></div>
-      <div class="dream-strip">✿ 작은 취향을 모으는 중</div>
-      <p class="profile-foot">since 2026 · made of little moments</p>
-    </aside>
+    <section class="intro">
+      <div class="planet" aria-hidden="true"><span>✦</span></div>
+      <span class="desktop-star star-one" aria-hidden="true">✦</span><span class="desktop-star star-two" aria-hidden="true">✧</span>
+      <div class="hero-copy"><p class="eyebrow">★ WELCOME TO MY LITTLE HOMEPAGE ★</p>
+      <h1>GUEST<br><span>BOOK</span><em>Club!</em><span class="sr-only">방명록</span></h1>
+      <p class="intro-copy">인터넷 어딘가에서 만난 우리.<br>그냥 가기 없기! 방명록에 흔적 남겨줘 ♡</p>
+      <a class="hero-write" href="#guest-name">➜ Click here to leave a note!</a></div>
+      <div class="welcome-window"><div class="window-title">Welcome.exe <span class="window-dots" aria-hidden="true">— □ ×</span></div>
+        <div class="window-menu" aria-hidden="true">File&nbsp;&nbsp; Edit&nbsp;&nbsp; View&nbsp;&nbsp; Favorites</div>
+        <div class="welcome-screen"><div class="pixel-computer" aria-hidden="true"><div class="monitor"><span>♥</span></div><div class="computer-base"></div></div><b>You've got a visitor!</b><p>작은 인사 한 줄도 환영합니다.</p><span class="online-badge">● YOU ARE NOW CONNECTED</span></div>
+        <div class="window-status">♡ Best viewed with an open heart.</div>
+      </div>
+      <div class="mini-window" aria-hidden="true"><div class="window-title">My mood today <span>×</span></div><p>100% <span>ONLINE</span></p><div class="progress-blocks"></div></div>
+      <div class="dream-strip"><span>✦ HELLO, WORLD!</span><span>방명록에 오신 것을 환영합니다 ♡</span><span>MAKE YOURSELF AT HOME ✦</span></div>
+    </section>
     <div class="guest-layout">
-      <div class="home-heading"><div><p>my sweet little homepage</p><h2>어서 와, 여긴 우리의 작은 방이야<span> ♡</span></h2></div><span class="home-url">interactive / home</span></div>
-      <section id="minimi-plaza" class="minimi-plaza" aria-label="미니미 미니룸"></section>
-      <div class="home-notice"><b>서로의 하루에 작은 발자국</b><span>미니미를 만들고, 오늘의 한마디를 남겨줘.</span></div>
       <aside class="composer">
-        <div class="compose-heading"><span>✎ 다녀간 마음 남기기</span><span class="compose-subtitle">a little note for you</span></div>
+        <div class="compose-heading"><span>▤ Sign Guestbook</span><span class="window-dots" aria-hidden="true">— □ ×</span></div>
         <form id="guest-form">
           <fieldset id="write-fields" disabled>
             <label for="guest-name">ScreenName <span>이름 또는 별명</span></label>
@@ -51,17 +54,18 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <p class="compose-foot">✉ 보내주신 마음은 소중하게 보관됩니다.</p>
       </aside>
       <section class="board-section" aria-labelledby="board-title">
-        <div class="board-heading"><h2 id="board-title">우리의 방명록 <span id="note-count">0</span></h2><div class="board-tools"><span id="connection-status" role="status">연결 중</span><button id="refresh" type="button">새로고침 ↻</button></div></div>
+        <section id="minimi-plaza" class="minimi-plaza" aria-label="미니미 광장"></section>
+        <div class="board-heading"><h2 id="board-title">▤ Guestbook entries <span id="note-count">0</span></h2><div class="board-tools"><span id="connection-status" role="status">연결 중</span><button id="refresh" type="button">새로고침 ↻</button></div></div>
         <p id="board-status" role="status" aria-live="polite">방명록을 불러오고 있어요.</p>
         <div id="note-board" class="note-board" aria-busy="true"></div>
         <button id="load-more" class="load-more" type="button" hidden>이전 방명록 더 보기 ↓</button>
       </section>
-    </div><nav class="home-tabs" aria-label="미니홈피 메뉴"><a href="#minimi-plaza">홈</a><a href="#board-title">방명록</a><a href="#guest-name">글쓰기</a><a href="${import.meta.env.BASE_URL}">작품집 ↗</a></nav>
+    </div>
   </main><footer><a class="start-button" href="${import.meta.env.BASE_URL}">▦ Start</a><span class="task-active">▤ Guestbook Explorer</span><span class="task-clock">♡ Connected · ${new Intl.DateTimeFormat('ko-KR', { month: '2-digit', day: '2-digit' }).format(new Date())}</span></footer>
 `
 
 mountStickers()
-document.getElementById('profile-avatar')!.append(minimi(734281))
+mountStardust()
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id)! as T
 const form = el<HTMLFormElement>('guest-form')
@@ -71,6 +75,7 @@ const writeFields = el<HTMLFieldSetElement>('write-fields')
 const formStatus = el('form-status')
 const boardStatus = el('board-status')
 const board = el('note-board')
+mountPaperTouch(board)
 const more = el<HTMLButtonElement>('load-more')
 const refresh = el<HTMLButtonElement>('refresh')
 const connection = el('connection-status')
