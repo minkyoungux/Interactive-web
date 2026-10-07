@@ -5,6 +5,8 @@ type Resident = { id: string; author: string; minimi_seed?: number | null }
 export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
   host.innerHTML = '<div class="plaza-title"><b>♡ Minimi Plaza.exe</b><button type="button" class="plaza-pause" aria-pressed="false">산책 멈추기</button></div><div class="plaza-scene"><div class="plaza-decor" aria-hidden="true"><span>✧</span><b>HELLO, LITTLE WORLD!</b><span>✧</span></div><p class="plaza-empty">미니미와 첫 메모를 남기면 이곳에 놀러 와요 ♡</p><div class="plaza-residents"></div></div><p class="plaza-caption">미니미를 누르면 그 친구의 메모로 이동해요.</p>'
   const stage = host.querySelector<HTMLElement>('.plaza-residents')!
+  host.querySelector('.plaza-title b')!.textContent = 'Mini room · 오늘도 여기서 만나'
+  host.querySelector('.plaza-decor')!.innerHTML = '<div class="room-window"><i></i><span>☁</span></div><div class="room-frame">home<br>sweet<br>home ♡</div><div class="room-shelf"><span>▥ ▥ ▥</span><i>✿</i></div><div class="room-sofa"><i></i><i></i></div><div class="room-rug"></div><div class="room-plant">✿<i></i></div><div class="room-table"><span>♡</span></div>'
   const empty = host.querySelector<HTMLElement>('.plaza-empty')!
   const pause = host.querySelector<HTMLButtonElement>('.plaza-pause')!
   const motion = matchMedia('(prefers-reduced-motion: reduce)')
