@@ -1,7 +1,17 @@
 import { minimi } from './guestbook-minimi'
 import './guestbook-plaza.css'
+import { mountSecretLetter } from './guestbook-letter'
 
 type Resident = { id: string; author: string; minimi_seed?: number | null }
+type Walker = { button: HTMLButtonElement; x: number; y: number; dx: number; dy: number; remaining: number; hovering: boolean; fear: number; cooldown: number }
+const conversations = [
+  ['퇴근 언제 해…?', '마음은 이미 했어。'],
+  ['우리… 일촌 할래?', '수락♡ 퇴근길도 같이 가。'],
+  ['오늘 좀 힘들었어。', '말 안 해도 돼… 옆에 있을게。'],
+  ['월급 들어왔대…!', '벌써 스쳐 지나갔어☆'],
+  ['커피 한 잔 할래?', '너랑이면… 디카페인도 설렌다。'],
+  ['나 잘하고 있는 걸까…', '오늘도 여기 왔잖아… 충분해♡'],
+]
 const coffeeLines = [
   '커피 냠… 내 심장은 카페인으로 뛴다。', '이 한 잔에… 퇴사 버튼 잠시 보류。',
   '너의 커피… 내 즐겨찾기에 저장♡', '잠은 사치… 커피는 복지。',
@@ -35,6 +45,7 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
   const pause = host.querySelector<HTMLButtonElement>('.plaza-pause')!
   const motion = matchMedia('(prefers-reduced-motion: reduce)')
   const scene = host.querySelector<HTMLElement>('.plaza-scene')!
+  mountSecretLetter(scene)
   const snacks = document.createElement('div')
   snacks.className = 'plaza-snacks'
   snacks.innerHTML = '<button type="button" data-snack="커피">☕ 커피</button><button type="button" data-snack="붕어빵">🐟 붕어빵</button><span role="status">간식을 끌어 주거나, 고른 뒤 미니미를 눌러줘。</span>'
@@ -49,8 +60,18 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
   let speaker: HTMLButtonElement | undefined
   let chatterUntil = 0, nextChatter = performance.now() + 4000
   let lastChatter = '', lastSpeaker = ''
+  let pair: { a: Walker; b: Walker; elapsed: number; lines: string[]; direction: number } | undefined
+  let nextMeeting = performance.now() + 6500, previousConversation = -1
+  const endMeeting = () => {
+    if (pair) for (const p of [pair.a, pair.b]) {
+      p.button.classList.remove('is-talking', 'is-together')
+      p.button.querySelector('.plaza-greeting')!.textContent = '안녕! 내 메모 볼래? ♡'
+    }
+    pair = undefined
+  }
   const feed = (button: HTMLButtonElement) => {
     if (!snack) return
+    endMeeting()
     const id = button.dataset.entryId!
     const until = performance.now() + 5000
     fed.set(id, until)
@@ -105,7 +126,7 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
   })
   scene.addEventListener('pointerleave', () => { pointer.active = false })
   let paused = motion.matches, visible = true, frame = 0, last = 0
-  const people = new Map<string, { button: HTMLButtonElement; x: number; y: number; dx: number; dy: number; remaining: number; hovering: boolean; fear: number; cooldown: number }>()
+  const people = new Map<string, Walker>()
   const syncPause = () => {
     pause.textContent = paused ? '산책 시작하기' : '산책 멈추기'; pause.setAttribute('aria-pressed', String(paused)); host.classList.toggle('is-paused', paused)
     if (paused) for (const p of people.values()) {
@@ -113,7 +134,7 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
       for (const key of ['--gaze-x','--gaze-y','--head-x','--head-angle']) p.button.style.removeProperty(key)
       if (!fed.has(p.button.dataset.entryId!)) p.button.querySelector('.plaza-greeting')!.textContent = '안녕! 내 메모 볼래? ♡'
     }
-    if (paused) { speaker?.classList.remove('is-chatting'); speaker = undefined }
+    if (paused) { speaker?.classList.remove('is-chatting'); speaker = undefined; endMeeting() }
   }
   pause.onclick = () => { paused = !paused; syncPause() }
   const preference = () => { paused = motion.matches; syncPause() }
@@ -124,10 +145,46 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
   function tick(now: number) {
     const dt = Math.min((now - last) / 1000, .05); last = now
     const area = stage.getBoundingClientRect()
+    if (pair && (!visible || document.hidden || snack || !pair.a.button.isConnected || !pair.b.button.isConnected)) endMeeting()
+    if (visible && !paused && !document.hidden && !snack) {
+      if (!pair && now >= nextMeeting) {
+        const candidates = [...people.values()].filter(p => !fed.has(p.button.dataset.entryId!) && !p.hovering && !p.button.matches(':focus-visible') && p.fear < now)
+        let closest: [Walker, Walker] | undefined, gap = 95
+        for (let i=0;i<candidates.length;i++) for(let j=i+1;j<candidates.length;j++) {
+          const a=candidates[i],b=candidates[j]
+          const distance=Math.hypot((a.x-b.x)*area.width/100,(a.y-b.y)*area.height/100)
+          if(distance<gap){gap=distance;closest=[a,b]}
+        }
+        if(closest) {
+          let index=Math.floor(Math.random()*(conversations.length-1));if(index>=previousConversation&&previousConversation>=0)index++
+          previousConversation=index
+          pair={a:closest[0],b:closest[1],elapsed:0,lines:conversations[index],direction:(closest[0].x+closest[1].x)/2>50?-1:1}
+          speaker?.classList.remove('is-chatting');speaker=undefined
+          nextChatter=now+16000
+        }
+        nextMeeting=now+(pair?18000:2000)
+      }
+      if(pair) {
+        pair.elapsed+=dt
+        const {a,b,elapsed,lines}=pair
+        a.button.classList.toggle('is-talking',elapsed<3)
+        b.button.classList.toggle('is-talking',elapsed>=3&&elapsed<6)
+        a.button.querySelector('.plaza-greeting')!.textContent=lines[0]
+        b.button.querySelector('.plaza-greeting')!.textContent=lines[1]
+        if(elapsed>=6) {
+          for(const p of [a,b]) {
+            p.button.classList.add('is-together')
+            p.x=Math.max(2,Math.min(98,p.x+pair.direction*3*dt))
+            p.button.style.left=`${p.x}%`
+          }
+        }
+        if(elapsed>=10) endMeeting()
+      }
+    }
     if (speaker && (now >= chatterUntil || !visible || document.hidden)) {
       speaker.classList.remove('is-chatting'); speaker = undefined
     }
-    if (visible && !paused && !document.hidden && !snack && now >= nextChatter) {
+    if (visible && !paused && !document.hidden && !snack && !pair && now >= nextChatter) {
       const eligible = [...people.values()].filter(p => !fed.has(p.button.dataset.entryId!) && !p.hovering)
       const others = eligible.filter(p => p.button.dataset.entryId !== lastSpeaker)
       const candidates = others.length ? others : eligible
@@ -141,6 +198,7 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
       nextChatter = now + 8500 + Math.random() * 4500
     }
     if (visible && !paused && !document.hidden) for (const p of people.values()) {
+      if (pair && (p === pair.a || p === pair.b)) continue
       const vx = pointer.x - (area.left + area.width * p.x / 100)
       const vy = pointer.y - (area.top + area.height * p.y / 100 + 35)
       const distance = Math.hypot(vx, vy)

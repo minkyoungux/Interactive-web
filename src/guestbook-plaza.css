@@ -11,6 +11,19 @@
 .plaza-greeting { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: 132px; padding: 8px; border: 1px solid #bfa3d0; border-radius: 8px; background: #fffbea; font: 10px/1.6 Tahoma,sans-serif; word-break: keep-all; pointer-events: none; }
 .plaza-person.is-chatting .plaza-greeting,.plaza-person.is-fed .plaza-greeting { display: block; }
 .plaza-person.is-chatting,.plaza-person.is-fed { z-index: 102 !important; }
+.plaza-person.is-talking { z-index: 103 !important; }
+.plaza-person.is-talking .plaza-greeting { display:block;background:#fff0fc; }
+.plaza-person.is-talking svg { animation-play-state:paused; }
+.plaza-person.is-together::after { content:'♡';position:absolute;right:0;top:0;color:#b66d9e; }
+.plaza-letter { position:absolute;bottom:9px;right:10px;z-index:105;border:1px solid #b894c7;background:#fff5df;color:#725281;padding:9px 13px;box-shadow:2px 3px #92719c33;font:11px Tahoma,sans-serif;cursor:pointer; }
+.secret-letter-dialog { width:min(340px,85vw);padding:5px;border:2px outset white;background:#fff4e4;color:#705575;box-shadow:6px 8px #45345844; }
+.secret-letter-dialog::backdrop { background:#4b355a66; }
+.secret-letter-dialog p { padding:25px 20px;font:16px/1.9 Georgia,serif;word-break:keep-all; }
+.secret-letter-dialog small { display:block;margin:12px;font-size:10px; }
+.secret-letter-dialog button { display:block;margin:12px auto;padding:8px 12px;border:2px outset white;background:#f0dff2;color:#705575;cursor:pointer; }
+.plaza-letter.flying { pointer-events:none;animation:letter-flight .85s ease-in forwards; }
+@keyframes letter-flight { to { transform:translate(-200px,-180px) rotate(-25deg);opacity:0; } }
+@media(prefers-reduced-motion:reduce) { .plaza-letter.flying { animation:none;opacity:0; } }
 .plaza-person:hover,.plaza-person:focus-visible { z-index: 101 !important; }.plaza-person:hover .plaza-greeting,.plaza-person:focus-visible .plaza-greeting { display: block; }
 .plaza-person:hover svg,.plaza-person:focus-visible svg,.is-paused .plaza-person svg { animation-play-state: paused; }
 .plaza-caption,.plaza-empty { font: 11px Tahoma,sans-serif; line-height: 1.6; color: #615178; padding: 5px 8px; margin: 0; }.plaza-empty { position: absolute; inset: 115px 20px auto; text-align: center; }
