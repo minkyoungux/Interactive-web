@@ -11,6 +11,7 @@ import { mountMusic } from './guestbook-music'
 import { mountDailyCat } from './guestbook-cat'
 import { mountNostalgia } from './guestbook-nostalgia'
 import { mountPlay, mountStamp, splitStamp } from './guestbook-play'
+import { mountWebcam } from './guestbook-webcam'
 
 const colors = ['butter', 'rose', 'mint', 'sky', 'lavender'] as const
 const colorNames = ['버터 옐로', '로즈 핑크', '민트', '하늘색', '라벤더']
@@ -74,6 +75,7 @@ mountMusic()
 mountDailyCat()
 mountNostalgia()
 mountPlay()
+mountWebcam()
 const postage = mountStamp()
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id)! as T

@@ -1,0 +1,22 @@
+.retro-cam { width:min(850px,94vw);max-height:90dvh;overflow:auto;padding:5px;border:2px outset #fff;background:#c5c2d0;color:#58416f;box-shadow:8px 10px 0 #2c184b44; }
+.retro-cam::backdrop { background:#34234e99;backdrop-filter:blur(4px); }
+.retro-cam .window-title { background:linear-gradient(90deg,#63549b,#df97bd);display:flex;justify-content:space-between;align-items:center;padding:7px; }
+.cam-close { background:#ddd3e8;border:2px outset #fff;color:#5e436e;cursor:pointer; }
+.cam-menu { font:10px monospace;display:flex;justify-content:space-between;padding:9px; }
+.cam-layout { display:grid;grid-template-columns:minmax(0,1fr) 215px;gap:15px;padding:9px; }
+.cam-screen { position:relative;aspect-ratio:4/3;border:3px inset #eee;background:repeating-linear-gradient(0deg,#26213a 0 2px,#2b2643 2px 4px); }
+.cam-screen canvas { width:100%;height:100%;display:block; }
+.cam-off { position:absolute;inset:30% 14%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;color:#67528c;text-shadow:1px 1px #fff;font:bold 16px monospace;pointer-events:none; }.cam-off[hidden] { display:none; }.cam-off small { font-size:11px; }
+.cam-layout { background:linear-gradient(120deg,#9cddf4,#e8c2e2);margin:0 6px;border:1px solid #fff; }
+.cam-settings { background:#c6c6c6;padding:12px;border:2px outset white;box-shadow:3px 4px #57476c44; }
+.cam-settings>b { background:linear-gradient(90deg,#080a85,#5d9cd2);color:#fff;padding:7px;margin:-8px -8px 3px;font:11px monospace; }
+.retro-cam .window-title { background:linear-gradient(90deg,#090581,#4a91ce); }
+.cam-screen { border:0;box-shadow:3px 4px #57476c44; }
+.cam-status { font:11px/1.7 Tahoma,sans-serif;min-height:38px; }
+.cam-settings { display:flex;flex-direction:column;gap:11px;font:12px Tahoma,sans-serif; }
+.cam-settings .cam-mirror { display:flex;align-items:center;gap:7px;margin:0; }.cam-mirror input { width:16px;height:16px;margin:0;padding:0;box-shadow:none; }
+.cam-settings label:not(.cam-mirror) { display:flex;flex-direction:column;gap:5px; }
+.cam-settings select,.cam-caption { width:100%;padding:7px;border:2px inset white;background:#fff1fa;color:#63467d;font:12px Tahoma,sans-serif; }
+.cam-settings button,.cam-result a,.cam-delete { background:#ead8f3;border:2px outset white;color:#64437a;padding:9px;cursor:pointer;font:12px Tahoma,sans-serif; }.cam-settings button:disabled { opacity:.45;cursor:default; }.cam-settings .cam-shoot { background:#f8c9e2; }
+.cam-privacy { font-size:10px;line-height:1.7; }.cam-result { padding:15px;border:1px dashed #9675af;margin:9px;background:#f0dfec;text-align:center; }.cam-result img { display:block;width:min(100%,480px);margin:15px auto;border:8px solid #fff6fa;box-shadow:3px 4px #8d719844; }.cam-result a { display:inline-block;margin-right:8px; }
+@media(max-width:600px) { .cam-layout { grid-template-columns:1fr; }.cam-menu span { display:none; } }

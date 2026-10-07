@@ -1,4 +1,5 @@
 import './guestbook-music.css'
+import { mountCDSwap } from './guestbook-cd'
 
 type Controller = { destroy(): void; addListener(event: string, callback: (event: { data: { isPaused: boolean; isBuffering: boolean; position: number; duration: number } }) => void): void }
 type EmbedAPI = { createController(element: HTMLElement, options: { uri: string; width: string; height: number }, callback: (controller: Controller) => void): void }
@@ -110,4 +111,5 @@ export function mountMusic() {
     buttons.forEach(b => b.setAttribute('aria-pressed', 'false'))
     status.textContent = '플레이어를 닫았어요. 곡을 선택하면 다시 열립니다.'
   })
+  mountCDSwap(panel)
 }

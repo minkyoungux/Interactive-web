@@ -1,0 +1,24 @@
+.bgm-tracks button { text-align:center;cursor:grab;touch-action:none;user-select:none; }
+.bgm-tracks button:active { cursor:grabbing; }
+.bgm-tracks button .cd-sleeve-disc,.cd-drag-ghost { border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 3px,#fff5 4px,transparent 5px),conic-gradient(#fff,var(--cd-tint),#d8f7f7,#fff,#c2bdd6,var(--cd-tint),#fff);box-shadow:inset 0 0 0 2px #fff9,2px 4px 7px #65557544; }
+.bgm-tracks button .cd-sleeve-disc { display:block;position:relative;width:clamp(68px,8vw,102px);aspect-ratio:1;margin:0 auto 12px;transition:transform .2s; }
+.cd-sleeve-disc::after,.cd-drag-ghost::after { content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:17%;height:17%;border-radius:50%;background:#dfd8e9;border:5px solid #ffffff9c;box-shadow:0 0 0 1px #a7a0b6; }
+.cd-sleeve-disc i { position:absolute;top:12%;left:0;right:0;font:10px monospace; }.cd-sleeve-disc em { position:absolute;bottom:12%;left:0;right:0;font:15px serif; }
+.bgm-tracks button:hover .cd-sleeve-disc { transform:translateY(-5px) rotate(-12deg); }
+.bgm-tracks button[aria-pressed=true] .cd-sleeve-disc { opacity:.28;box-shadow:none; }
+.bgm-disc-well { position:relative;perspective:600px;touch-action:none; }
+.bgm-disc-well .bgm-disc { opacity:0;transition:opacity .2s; }
+.cd-loaded .bgm-disc-well .bgm-disc { opacity:1;cursor:grab; }
+.cd-loaded .bgm-disc { background-color:var(--cd-tint); }
+.cd-lid { position:absolute;inset:-4px;border-radius:50%;border:2px solid #ffffffb0;box-shadow:inset 0 0 0 5px #ffffff30,0 4px 8px #75658c33;background:linear-gradient(130deg,#ffffff60,transparent 45%,#d6b6ea25);display:flex;align-items:flex-end;justify-content:center;padding-bottom:25px;font:7px monospace;letter-spacing:1px;pointer-events:none;transform-origin:50% 0;transform:rotateX(75deg);transition:transform .55s; }
+.cd-loaded .cd-lid { transform:rotateX(0); }
+.cd-inserting .cd-lid { animation:cd-close .75s ease-out; }
+.cd-inserting .bgm-lcd { animation:lcd-light .75s; }
+.cd-drop-ready .bgm-disc-well { outline:3px dashed #ba78c2;outline-offset:5px;background:#e0c8ee; }
+.cd-dragging .cd-lid { transform:rotateX(75deg); }
+.cd-hint { margin:8px 0 5px;text-align:center;font:10px/1.5 Tahoma,sans-serif;color:#77618e; }
+.cd-eject { border:2px outset white;background:#e7deec;padding:5px 9px;color:#654c7c;font-size:10px;cursor:pointer; }.cd-eject:disabled { opacity:.45;cursor:default; }
+.cd-drag-ghost { position:fixed;z-index:10000;pointer-events:none;transform:translate(-50%,-50%) rotate(-15deg);width:110px;height:110px;padding-top:15px;text-align:center;color:#796185;font:11px monospace; }
+@keyframes cd-close { from { transform:rotateX(75deg); } to { transform:rotateX(0); } }
+@keyframes lcd-light { 40% { background:#d4f4e1;box-shadow:0 0 15px #b3eadb; } }
+@media(prefers-reduced-motion:reduce) { .cd-lid,.bgm-disc-well .bgm-disc,.bgm-tracks button .cd-sleeve-disc { transition:none; }.cd-inserting .cd-lid,.cd-inserting .bgm-lcd { animation:none; } }
