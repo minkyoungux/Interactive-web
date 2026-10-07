@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#dbe9dc" />
+    <meta
+      name="description"
+      content="천천히 걷고, 심고, 두드리며 마음을 쉬어 가는 픽셀 명상 정원"
+    />
+    <title>마음절 · MAEUMJEOL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="마음절 홈">
+        <span class="brand-mark" aria-hidden="true">♧</span>
+        <span><b>마음절</b><small>MAEUMJEOL</small></span>
+      </a>
+      <div class="now-here" aria-live="polite">
+        <span class="pulse-dot"></span>
+        <span>지금, <b id="locationName">고요의 들판</b></span>
+      </div>
+      <nav class="top-actions" aria-label="페이지 설정">
+        <button class="icon-button" id="dayToggle" type="button" aria-label="밤낮 전환" title="밤낮 전환">☼</button>
+        <button class="icon-button" id="soundToggle" type="button" aria-label="소리 끄기" title="소리 끄기">♪</button>
+        <button class="text-button" id="helpButton" type="button"><span>?</span> 노는 법</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="world-shell" aria-label="마음절 산책 지도">
+        <div class="world-viewport" id="worldViewport" tabindex="0">
+          <div class="world" id="world">
+            <div class="sun-glow parallax" data-depth="0.2"></div>
+            <div class="cloud cloud-one parallax" data-depth="0.45"></div>
+            <div class="cloud cloud-two parallax" data-depth="0.3"></div>
+
+            <div class="ambient-layer map-ambience" aria-hidden="true">
+              <i class="pixel-cloud pc1"></i><i class="pixel-cloud pc2"></i>
+              <i class="waterfall-flow"></i><i class="pond-shimmer map-water"></i>
+              <i class="pixel-fish mf1"></i><i class="pixel-fish mf2"></i><i class="pixel-fish mf3"></i><i class="pixel-fish mf4"></i><i class="pixel-fish mf5"></i><i class="pixel-fish mf6"></i><i class="pixel-fish mf7"></i><i class="pixel-fish mf8"></i>
+              <i class="grass-sway mg1"></i><i class="grass-sway mg2"></i><i class="grass-sway mg3"></i><i class="grass-sway mg4"></i><i class="grass-sway mg5"></i><i class="grass-sway mg6"></i><i class="grass-sway mg7"></i><i class="grass-sway mg8"></i><i class="grass-sway mg9"></i><i class="grass-sway mg10"></i><i class="grass-sway mg11"></i><i class="grass-sway mg12"></i>
+              <i class="floating-leaf ml1"></i><i class="floating-leaf ml2"></i><i class="floating-leaf ml3"></i>
+              <i class="butterfly mb1"></i><i class="butterfly mb2"></i>
+              <i class="cherry-tree map-cherry"></i>
+              <i class="wind-chime-interactive map-chime"></i>
+              <i class="reed-sway mr1"></i><i class="reed-sway mr2"></i><i class="reed-sway mr3"></i><i class="reed-sway mr4"></i>
+              <i class="dragonfly md1"></i><i class="dragonfly md2"></i><i class="dragonfly md3"></i><i class="dragonfly md4"></i>
+              <i class="pixel-frog map-frog"></i>
+              <i class="firefly fly1"></i><i class="firefly fly2"></i><i class="firefly fly3"></i><i class="firefly fly4"></i><i class="firefly fly5"></i>
+            </div>
+
+            <svg class="paths" viewBox="0 0 1920 1120" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M960 1045 C930 850 945 690 945 520 C790 510 645 510 515 400" />
+              <path d="M945 520 C1100 510 1245 500 1435 385" />
+              <path d="M942 680 C760 720 590 790 390 870" />
+              <path d="M946 680 C1130 720 1305 780 1510 870" />
+              <path d="M945 520 C955 420 965 350 980 285" />
+            </svg>
+
+            <div class="terrain pond" aria-hidden="true">
+              <span class="ripple r1"></span><span class="ripple r2"></span>
+              <i class="koi koi-a"></i><i class="koi koi-b"></i><i class="lily l1"></i><i class="lily l2"></i>
+            </div>
+            <div class="terrain garden-patch" aria-hidden="true"></div>
+            <div class="terrain rock-garden" aria-hidden="true">
+              <i></i><i></i><i></i><span></span><span></span><span></span>
+            </div>
+
+            <button class="place greenhouse" data-place="greenhouse" style="--x: 325px; --y: 415px" type="button">
+              <span class="place-halo"></span>
+              <span class="greenhouse-art" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="place-sign"><b>숨의 온실</b><small>씨앗을 심어 보세요</small></span>
+            </button>
+
+            <button class="place temple" data-place="monk" style="--x: 960px; --y: 310px" type="button">
+              <span class="place-halo"></span>
+              <span class="temple-art" aria-hidden="true"><i class="roof roof-a"></i><i class="roof roof-b"></i><i class="door"></i></span>
+              <span class="lantern lantern-left" aria-hidden="true"></span><span class="lantern lantern-right" aria-hidden="true"></span>
+              <span class="place-sign"><b>무문암</b><small>AI 스님이 기다려요</small></span>
+            </button>
+
+            <button class="place moktak-place" data-place="moktak" style="--x: 1570px; --y: 455px" type="button">
+              <span class="place-halo"></span>
+              <span class="moktak-art" aria-hidden="true"><i></i></span>
+              <span class="place-sign"><b>울림 마루</b><small>마음을 두드려요</small></span>
+            </button>
+
+            <button class="place pond-place" data-place="pond" style="--x: 385px; --y: 805px" type="button">
+              <span class="place-halo"></span>
+              <span class="stone-art" aria-hidden="true">水</span>
+              <span class="place-sign"><b>비움 연못</b><small>물결을 바라봐요</small></span>
+            </button>
+
+            <button class="place vista" data-place="vista" style="--x: 1365px; --y: 845px" type="button">
+              <span class="place-halo"></span>
+              <span class="pagoda-art" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="place-sign"><b>바람 전망대</b><small>숨을 길게 쉬어요</small></span>
+            </button>
+
+            <div class="flora tree t1" style="--x: 105px; --y: 180px"></div>
+            <div class="flora tree t2" style="--x: 175px; --y: 250px"></div>
+            <div class="flora tree t3" style="--x: 1740px; --y: 180px"></div>
+            <div class="flora tree t4" style="--x: 1655px; --y: 235px"></div>
+            <div class="flora tree t5" style="--x: 105px; --y: 825px"></div>
+            <div class="flora tree t6" style="--x: 1750px; --y: 805px"></div>
+            <div class="flower-cluster f1" aria-hidden="true">✦　·　✿</div>
+            <div class="flower-cluster f2" aria-hidden="true">·　✿　·　✦</div>
+            <div class="flower-cluster f3" aria-hidden="true">✿　·　✿</div>
+
+            <div class="player dir-front" id="player" aria-label="산책하는 여행자">
+              <span class="player-shadow"></span><span class="body"></span><span class="head"></span><span class="satchel"></span>
+            </div>
+          </div>
+
+          <div class="welcome-card" id="welcomeCard">
+            <span class="eyebrow">A TINY TEMPLE ON THE WEB</span>
+            <h1>마음 가는 대로,<br /><em>천천히 걸어요.</em></h1>
+            <p>아무것도 이루지 않아도 괜찮은 작은 절입니다.</p>
+            <button class="primary-button" id="startButton" type="button">산책 시작하기 <span>→</span></button>
+            <small>방향키 / WASD 로 걸을 수 있어요</small>
+          </div>
+
+          <div class="map-hud" aria-label="장소 미니맵">
+            <span class="map-title">마음절 지도</span>
+            <button data-map-place="greenhouse" style="--mx: 20%; --my: 28%" aria-label="숨의 온실로 안내"></button>
+            <button data-map-place="monk" style="--mx: 51%; --my: 18%" aria-label="무문암으로 안내"></button>
+            <button data-map-place="moktak" style="--mx: 78%; --my: 31%" aria-label="울림 마루로 안내"></button>
+            <button data-map-place="pond" style="--mx: 22%; --my: 76%" aria-label="비움 연못으로 안내"></button>
+            <button data-map-place="vista" style="--mx: 80%; --my: 75%" aria-label="바람 전망대로 안내"></button>
+            <i id="mapPlayer"></i>
+          </div>
+
+          <div class="interaction-prompt" id="interactionPrompt" aria-live="polite">
+            <kbd>E</kbd><span><b>들어가기</b><small id="promptPlace">장소 가까이 걸어가세요</small></span>
+          </div>
+
+          <div class="touch-pad" aria-label="터치 이동 패드">
+            <button data-move="up" aria-label="위로">↑</button>
+            <button data-move="left" aria-label="왼쪽">←</button>
+            <button data-move="down" aria-label="아래로">↓</button>
+            <button data-move="right" aria-label="오른쪽">→</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="scene" id="scene" aria-hidden="true">
+      <div class="scene-backdrop"></div>
+      <section class="scene-panel" role="dialog" aria-modal="true" aria-labelledby="sceneTitle">
+        <button class="scene-close" id="sceneClose" type="button" aria-label="장소 닫기">×</button>
+        <div id="sceneContent"></div>
+      </section>
+    </div>
+
+    <template id="greenhouseTemplate">
+      <div class="scene-heading">
+        <span class="scene-kicker">숨의 온실 · LITTLE GREENHOUSE</span>
+        <h2 id="sceneTitle">서두르지 않아도<br />자라는 것들이 있어요.</h2>
+        <p>화분을 눌러 씨앗을 심고, 물방울을 건네 보세요.</p>
+      </div>
+      <div class="greenhouse-scene">
+        <div class="seed-picker" role="group" aria-label="씨앗 선택">
+          <button class="seed active" data-seed="lotus" type="button"><span>✿</span>연꽃</button>
+          <button class="seed" data-seed="bamboo" type="button"><span>〽</span>대나무</button>
+          <button class="seed" data-seed="herb" type="button"><span>♣</span>향초</button>
+        </div>
+        <div class="plant-bed" id="plantBed" aria-label="식물 화분 여섯 개"></div>
+        <div class="garden-note"><span>오늘의 돌봄</span><b id="gardenCount">0 / 6</b><small>작은 돌봄도 마음에 푸른 자국을 남겨요.</small></div>
+      </div>
+    </template>
+
+    <template id="moktakTemplate">
+      <div class="scene-heading centered">
+        <span class="scene-kicker">울림 마루 · SOUND OF NOW</span>
+        <h2 id="sceneTitle">생각 대신,<br />지금의 울림 하나.</h2>
+        <p>목탁을 클릭하거나 스페이스바를 눌러 보세요.</p>
+      </div>
+      <div class="moktak-stage">
+        <div class="sound-rings" id="soundRings"></div>
+        <button class="big-moktak" id="bigMoktak" type="button" aria-label="목탁 치기"><span></span><i></i></button>
+        <div class="tap-counter"><b id="tapCount">0</b><span>번의 울림</span></div>
+        <p class="mantra" id="mantra">한 번의 소리에 한 번의 생각을 놓아요</p>
+      </div>
+    </template>
+
+    <template id="monkTemplate">
+      <div class="monk-layout">
+        <div class="monk-portrait" aria-hidden="true"><span class="monk-head"></span><span class="monk-body"></span><i>…</i></div>
+        <div class="scene-heading monk-heading">
+          <span class="scene-kicker">무문암 · AI MONK</span>
+          <h2 id="sceneTitle">무엇이 마음을<br />무겁게 하나요?</h2>
+          <p>정답보다 잠시 머물 수 있는 말을 건넬게요.</p>
+        </div>
+      </div>
+      <div class="chat-log" id="chatLog" aria-live="polite">
+        <div class="bubble monk-bubble">반가워요. 오늘 마음의 날씨는 어떤가요?</div>
+      </div>
+      <div class="quick-prompts">
+        <button type="button">마음이 복잡해요</button><button type="button">잘 쉬는 법이 궁금해요</button><button type="button">그냥 위로해 주세요</button>
+      </div>
+      <form class="chat-form" id="chatForm">
+        <label class="sr-only" for="chatInput">AI 스님에게 말하기</label>
+        <input id="chatInput" autocomplete="off" placeholder="천천히 적어 보세요…" maxlength="120" />
+        <button type="submit">보내기 <span>↗</span></button>
+      </form>
+      <p class="api-note">지금은 명상 응답 데모예요 · API 연결 준비됨</p>
+    </template>
+
+    <template id="pondTemplate">
+      <div class="scene-heading centered light">
+        <span class="scene-kicker">비움 연못 · EMPTY POND</span>
+        <h2 id="sceneTitle">물 위에 내려놓고<br />흘려보내세요.</h2>
+        <p>수면을 클릭하면 생각 하나가 물결이 되어 사라져요.</p>
+      </div>
+      <div class="pond-scene" id="pondScene">
+        <div class="pond-message" id="pondMessage">오늘도 충분했어요</div>
+        <i class="scene-koi k1"></i><i class="scene-koi k2"></i><i class="scene-koi k3"></i>
+      </div>
+      <button class="release-button" id="releaseButton" type="button">생각 하나 띄워 보내기</button>
+    </template>
+
+    <template id="vistaTemplate">
+      <div class="scene-heading centered light">
+        <span class="scene-kicker">바람 전망대 · BREATHE WITH SKY</span>
+        <h2 id="sceneTitle">들어오고, 머물고,<br />다시 흘러갑니다.</h2>
+        <p>아래 원을 누르고 있는 동안 천천히 숨을 들이쉬세요.</p>
+      </div>
+      <div class="breath-stage">
+        <div class="mountain-layer m-back"></div><div class="mountain-layer m-front"></div>
+        <button class="breath-orb" id="breathOrb" type="button"><span id="breathText">누르고 숨 쉬기</span><i></i></button>
+        <div class="breath-count"><b id="breathCount">0</b><span>고요한 호흡</span></div>
+      </div>
+    </template>
+
+    <template id="helpTemplate">
+      <div class="scene-heading">
+        <span class="scene-kicker">HOW TO WANDER</span>
+        <h2 id="sceneTitle">정해진 길은<br />없습니다.</h2>
+      </div>
+      <div class="help-grid">
+        <div><kbd>WASD</kbd><b>걷기</b><p>방향키로도 움직여요.</p></div>
+        <div><kbd>E</kbd><b>머물기</b><p>가까운 장소에 들어가요.</p></div>
+        <div><kbd>SPACE</kbd><b>두드리기</b><p>목탁과 호흡에 반응해요.</p></div>
+        <div><span class="mouse-icon">↖</span><b>발견하기</b><p>클릭하고 움직여 보세요.</p></div>
+      </div>
+      <p class="help-foot">완료해야 할 퀘스트도, 점수도 없어요.<br />마음이 머무는 곳에서 필요한 만큼 쉬어 가세요.</p>
+    </template>
+
+    <script type="module" src="./main.ts"></script>
+    <script type="module" src="/src/capture.ts"></script>
+  </body>
+</html>

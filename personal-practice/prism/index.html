@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#060608" />
+  <meta name="description" content="손끝에 휘어지는 빛. 색이 갈라지고 펼쳐지는 프리즘 스타버스트." />
+  <title>PRISM — 빛의 결</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main>
+    <canvas id="light" tabindex="0" aria-label="마우스나 손가락을 움직여 빛을 휘게 하세요. 누르면 빛이 모이고 놓으면 펼쳐집니다. 방향키와 스페이스로도 조작할 수 있습니다."></canvas>
+    <header><div class="identity"><span class="mark" aria-hidden="true">✳</span><div><h1>PRISM</h1><p>LIGHT, UNFOLDED</p></div></div><span class="edition">LIGHT STUDY <span>—</span> 002</span></header>
+    <footer>
+      <div class="instructions"><p>쓸면 휘어지고 <span>·</span> 놓으면 펼쳐지는 빛</p><a href="../">물방울 실습 ↗</a></div>
+      <div class="controls"><button id="pause" type="button" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span><span id="pause-label">일시정지</span></button><span class="divider"></span><button id="reset" type="button"><span aria-hidden="true">↺</span> 다시 시작</button></div>
+    </footer>
+    <p id="fallback" role="status" hidden>빛을 그릴 수 없어요. 하드웨어 가속을 켜거나 다른 브라우저에서 열어주세요.</p>
+  </main>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

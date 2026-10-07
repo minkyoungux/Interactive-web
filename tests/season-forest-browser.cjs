@@ -1,0 +1,81 @@
+const assert = require('node:assert/strict')
+const path = require('node:path')
+const os = require('node:os')
+let playwright
+try { playwright = require('playwright') }
+catch { playwright = require(path.join(os.homedir(), '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright')) }
+const base = process.argv[2] || 'https://127.0.0.1:5173'
+
+;(async () => {
+  const browser = await playwright.chromium.launch({ channel: 'chrome', headless: true })
+  try {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, ignoreHTTPSErrors: true, reducedMotion: 'reduce' })
+    const errors = []
+    page.on('pageerror', error => errors.push(error.message))
+    await page.goto(`${base}/season-forest.html`)
+    await page.waitForFunction(() => document.querySelector('.world-canvas').width > 300)
+    assert.equal(await page.locator('.render-error').isVisible(), false)
+    const north = ['겨울', '겨울', '봄', '봄', '봄', '여름', '여름', '여름', '가을', '가을', '가을', '겨울']
+    const south = ['여름', '여름', '가을', '가을', '가을', '겨울', '겨울', '겨울', '봄', '봄', '봄', '여름']
+    for (let month = 0; month < 12; month++) {
+      await page.locator(`[data-month="${month}"]`).click()
+      assert.ok((await page.locator('#north-season .season-title').innerText()).includes(north[month]))
+      assert.ok((await page.locator('#south-season .season-title').innerText()).includes(south[month]))
+      assert.equal(await page.locator('.month-button[aria-pressed=true]').count(), 1)
+    }
+    const zoom = async () => parseInt(await page.locator('#zoom-level').innerText())
+    await page.locator('#zoom-in').click()
+    await page.waitForFunction(() => parseInt(document.querySelector('#zoom-level').textContent) > 100)
+    await page.locator('#reset-view').click()
+    await page.waitForFunction(() => document.querySelector('#zoom-level').textContent === '100%')
+    await page.mouse.move(720, 440)
+    await page.mouse.wheel(0, -450)
+    await page.waitForTimeout(300)
+    assert.ok(await zoom() > 100, 'wheel zooms in')
+    await page.locator('#reset-view').click()
+    await page.locator('.world-canvas').focus()
+    await page.keyboard.press('+')
+    await page.waitForTimeout(150)
+    assert.ok(await zoom() > 100, 'keyboard zooms in')
+    await page.keyboard.press('Home')
+    for (const selector of ['#cloud-toggle', '#equator-toggle', '#auto-rotate']) {
+      const button = page.locator(selector)
+      const before = await button.getAttribute('aria-pressed')
+      await button.click()
+      assert.notEqual(await button.getAttribute('aria-pressed'), before)
+      await button.click()
+    }
+    const canvas = page.locator('.world-canvas')
+    await page.waitForTimeout(200)
+    const before = await canvas.screenshot()
+    await page.mouse.move(720, 440)
+    await page.mouse.down()
+    await page.mouse.move(940, 470, { steps: 15 })
+    await page.mouse.up()
+    await page.waitForTimeout(700)
+    assert.notDeepEqual(await canvas.screenshot(), before, 'drag changes the rendered view')
+    await page.locator('#reset-view').click()
+    await page.locator('[data-month="8"]').click()
+    await page.screenshot({ path: 'artifacts/season-forest-desktop.png' })
+    await page.locator('[data-month="5"]').click()
+    await page.screenshot({ path: 'artifacts/season-forest-solstice.png' })
+    const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, ignoreHTTPSErrors: true, reducedMotion: 'reduce' })
+    mobile.on('pageerror', error => errors.push(error.message))
+    await mobile.goto(`${base}/season-forest.html`)
+    await mobile.waitForFunction(() => document.querySelector('.world-canvas').width > 300)
+    assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'no horizontal overflow')
+    await mobile.locator('[data-month="8"]').tap()
+    await mobile.screenshot({ path: 'artifacts/season-forest-mobile.png' })
+    const cdp = await mobile.context().newCDPSession(mobile)
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 160, y: 380, id: 0 }, { x: 220, y: 380, id: 1 }] })
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 110, y: 380, id: 0 }, { x: 270, y: 380, id: 1 }] })
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
+    await mobile.waitForTimeout(250)
+    assert.ok(parseInt(await mobile.locator('#zoom-level').innerText()) > 100, 'pinch zooms in')
+    await page.goto(`${base}/#season-forest`)
+    await page.frameLocator('#example-frame').locator('.world-canvas').waitFor()
+    assert.equal(await page.locator('#tab-season-forest').getAttribute('aria-selected'), 'true')
+    assert.deepEqual(errors, [])
+    console.log('PASS: 12 month pairs, zoom buttons/wheel/keyboard/pinch, drag, view toggles, mobile layout, hub integration; no runtime errors.')
+  } finally { await browser.close() }
+})().catch(error => { console.error(error); process.exitCode = 1 })

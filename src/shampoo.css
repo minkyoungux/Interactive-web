@@ -1,0 +1,53 @@
+:root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; color: #233d42; background: #e4eff0; font-synthesis: none; }
+* { box-sizing: border-box; }
+html, body, #app { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+button, a { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 3px solid #559fae; outline-offset: 5px; }
+.camera, .shampoo-canvas { position: fixed; inset: 0; width: 100%; height: 100%; }
+.camera { object-fit: cover; transform: scaleX(-1); opacity: 0; }
+.camera-on .camera { opacity: 1; }
+.shampoo-canvas { pointer-events: none; }
+.shampoo-fog { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; }
+.camera-on .shampoo-fog { opacity: 1; }
+.shampoo-header { position: fixed; inset: 0 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 28px 34px; }
+.shampoo-brand { display: flex; align-items: center; gap: 14px; color: inherit; text-decoration: none; }
+.shampoo-brand b { font-size: 23px; letter-spacing: -.06em; }
+.shampoo-brand small { font: 10px ui-monospace, monospace; letter-spacing: .09em; border-left: 1px solid #afc7cc; padding-left: 14px; }
+.shampoo-state { font-size: 11px; border: 1px solid #c6dadd; border-radius: 30px; padding: 10px 15px; background: #f5faf8eb; color: #233d42; }
+.shampoo-state::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 9px; background: #65a4b0; }
+.shampoo-intro { position: fixed; left: 7%; top: 25%; }
+.shampoo-kicker { font: 10px ui-monospace, monospace; letter-spacing: .2em; }
+.shampoo-intro h1 { font-size: clamp(62px, 9vw, 136px); font-weight: 550; line-height: .93; letter-spacing: -.075em; margin: 28px 0; }
+.shampoo-intro h1 em { font-family: Georgia, serif; font-weight: 400; }
+.shampoo-intro p:last-child { font-size: 13px; line-height: 1.9; color: #638087; }
+.shampoo-orb { position: fixed; width: min(35vw, 480px); aspect-ratio: 1; right: 9%; top: 24%; border-radius: 50%; background: radial-gradient(circle at 32% 27%, #fff 0, #f7ffffb0 18%, #c8e3e866 52%, #a1c8d15c 73%, #f8ffff 95%); box-shadow: inset -8px -12px 24px #a0c4ca44, inset 4px 4px 16px #fff, 0 30px 65px #8ab0b224; }
+.shampoo-orb::after { content: ''; position: absolute; width: 46%; aspect-ratio: 1; border-radius: 50%; right: -14%; bottom: -9%; background: inherit; box-shadow: inherit; }
+.shampoo-controls { position: fixed; left: 34px; bottom: 30px; max-width: calc(100% - 125px); }
+.shampoo-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.shampoo-buttons button { border: 1px solid #bad1d5; border-radius: 999px; padding: 13px 20px; background: #f5faf8ec; color: #233d42; font-size: 12px; }
+.shampoo-buttons .primary { background: #b9e4ec; border-color: #a3cdd5; font-weight: 700; }
+.shampoo-buttons button:disabled { opacity: .55; cursor: wait; }
+.shampoo-note { font-size: 10px; line-height: 1.6; margin-bottom: 0; color: #648189; }
+.shampoo-guide { position: fixed; right: 34px; bottom: 110px; text-align: right; font-size: 12px; line-height: 2; pointer-events: none; }
+.shampoo-guide span { font: 10px ui-monospace, monospace; letter-spacing: .14em; color: #65858c; }
+.shampoo-error { max-width: 420px; padding: 12px; border-radius: 12px; border: 1px solid #e0bab0; background: #fff2eb; color: #913f2c; font-size: 12px; line-height: 1.7; }
+.camera-on .shampoo-intro, .camera-on .shampoo-orb { display: none; }
+.camera-on .shampoo-header { color: white; background: linear-gradient(#0005, transparent); }
+.camera-on .shampoo-guide, .camera-on .shampoo-note { color: white; text-shadow: 0 1px 5px #0008; }
+.camera-on .shampoo-guide span { color: #b9e4ec; }
+body.shampoo-page .universal-capture { left: auto; right: 30px; bottom: max(28px, env(safe-area-inset-bottom)); transform: none; align-items: flex-end; }
+@media (max-width: 640px) {
+  .shampoo-header { padding: 20px; align-items: flex-start; }
+  .shampoo-brand { gap: 8px; }
+  .shampoo-brand b { font-size: 20px; }
+  .shampoo-brand small { padding-left: 8px; font-size: 8px; }
+  .shampoo-state { max-width: 165px; font-size: 10px; padding: 8px 10px; }
+  .shampoo-intro { top: 20%; left: 22px; }
+  .shampoo-intro h1 { font-size: 68px; }
+  .shampoo-orb { width: 38vw; top: 44%; right: 14%; }
+  .shampoo-controls { left: 20px; bottom: 24px; }
+  .shampoo-buttons button { padding: 11px 14px; }
+  .shampoo-guide { right: 20px; bottom: 145px; font-size: 10px; }
+  body.shampoo-page .universal-capture { right: 22px; bottom: max(26px, env(safe-area-inset-bottom)); }
+}

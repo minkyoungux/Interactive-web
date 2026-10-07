@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#dce8ec" />
+  <meta name="description" content="손끝에 출렁이는 투명한 물방울. 누르고, 쓸고, 잔물결을 느껴보세요." />
+  <title>물 — A DROP OF WATER</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main>
+    <canvas id="field" tabindex="0" aria-label="물방울을 쓸면 잔물결이 생기고, 누르면 표면이 눌립니다. 놓으면 작은 물방울이 튀어 돌아옵니다. 방향키와 스페이스로도 조작할 수 있습니다."></canvas>
+    <header>
+      <div class="identity"><svg width="29" height="35" viewBox="0 0 32 40" fill="none" aria-hidden="true"><path d="M16 3C13 10 5 18 5 25a11 11 0 0 0 22 0C27 18 19 10 16 3Z" stroke="currentColor" stroke-width="1"/><path d="M10 25c0 4 2 6 5 7" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg><div><h1>물</h1><span class="eyebrow">A DROP OF WATER</span></div></div>
+      <a class="edition experiment-link" href="./prism/">빛 실험 ↗</a>
+    </header>
+
+    <footer>
+      <p class="hint"><span class="mouse-icon" aria-hidden="true"></span>살짝 건드리고 <span class="separator">·</span> 꾹 눌렀다 놓아보세요</p>
+      <div class="controls"><button type="button" id="pause" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span><span id="pause-label">일시정지</span></button><span class="divider"></span><button type="button" id="reset"><span aria-hidden="true">↺</span> 다시 시작</button></div>
+    </footer>
+    <p id="fallback" role="status" hidden>이 브라우저에서 물방울 화면을 열 수 없어요. 하드웨어 가속을 켜거나 다른 브라우저에서 열어주세요.</p>
+  </main>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

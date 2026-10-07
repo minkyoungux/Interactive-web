@@ -1,0 +1,15 @@
+.forest-app.deep-sea-world{background:radial-gradient(ellipse at 42% -18%,#1d7486 0%,#0b3b51 28%,#061e33 57%,#020c1c 100%);color:#c6e5e7;isolation:isolate}
+.deep-sea-backdrop{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.deep-sea-surface{position:absolute;left:-10%;right:-10%;top:-65px;height:150px;background:radial-gradient(ellipse at 43% 40%,#90edec38,transparent 67%);filter:blur(24px)}
+.deep-sea-ray{position:absolute;top:-18%;height:112%;width:28%;transform-origin:50% 0;background:linear-gradient(180deg,#7ed7dd25,#5fcada09 50%,transparent 88%);clip-path:polygon(43% 0,55% 0,100% 100%,0 100%);filter:blur(12px);animation:deep-sea-sway 26s ease-in-out infinite alternate}
+.deep-sea-ray.ray-one{left:9%;transform:rotate(-16deg)}.deep-sea-ray.ray-two{left:34%;width:20%;opacity:.65;transform:rotate(13deg);animation-delay:-9s;animation-duration:32s}.deep-sea-ray.ray-three{left:58%;width:35%;opacity:.48;transform:rotate(24deg);animation-delay:-17s;animation-duration:38s}
+.deep-sea-haze{position:absolute;inset:25% -20% -25%;background:radial-gradient(ellipse at 50% 52%,#1b64771c 0%,transparent 60%);filter:blur(30px)}
+@keyframes deep-sea-sway{from{margin-left:-2%;opacity:.45}to{margin-left:3%;opacity:.9}}
+.deep-sea-world .forest-header{border-bottom-color:#7bbac41a}.deep-sea-world .forest-brand{color:#c3e8e9}.deep-sea-world .brand-leaf{background:#286472;color:#c4eeee;box-shadow:0 0 22px #58bdc518}.deep-sea-world .forest-brand small,.deep-sea-world .header-note{color:#78a9b4}.deep-sea-world .world-status{color:#a7cdd2}.deep-sea-world .world-status i{background:#8adecf;box-shadow:0 0 12px #79edce66}
+.deep-sea-world .resident-display-tools button,.deep-sea-world .resident-toolbar,.deep-sea-world .control-group,.deep-sea-world .round-control{background:#0a293bd9;border:1px solid #72b9c22a;color:#afcfd5;box-shadow:none}
+.deep-sea-world .resident-toolbar button,.deep-sea-world .resident-toolbar select{background:#143b4b;color:#c1dfe1}.deep-sea-world .resident-display-tools button[aria-pressed=true],.deep-sea-world .resident-display-tools button[aria-expanded=true]{background:#225b66;color:#d5f5ee}
+.deep-sea-world .settlement-enter{background:#367c80;color:#e2fff2;box-shadow:0 0 28px #3eafa822}.deep-sea-world .settlement-enter:hover{background:#459495}
+.deep-sea-world .resident-dialogue-card,.deep-sea-world .resident-ambient{background:#e8f0de}.deep-sea-world .dialogue-name{background:#8fcac8;color:#285e65}.deep-sea-world .dialogue-line{color:#425d5b}.deep-sea-world .resident-conversation header button,.deep-sea-world .resident-chat-tools>summary{background:#163b49;color:#bbdddd}
+.deep-sea-world .resident-life-notice{background:#15394a;color:#c3e4df}.deep-sea-world .render-error{color:#cce9e8;background:#113047}
+.deep-sea-world #resident-world-drawer{color:#425c5a}
+@media(prefers-reduced-motion:reduce){.deep-sea-ray{animation:none}}

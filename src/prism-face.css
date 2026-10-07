@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600&display=swap');
+:root { font-family: 'DM Sans', 'Noto Sans KR', sans-serif; color: #eae9ee; background: #08090c; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input { font: inherit; }
+button, a, input { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, canvas:focus-visible { outline: 2px solid #b7c6ff; outline-offset: 5px; }
+[hidden] { display: none !important; }
+.prism-world { position: fixed; inset: 0; width: 100%; height: 100%; touch-action: none; }
+.prism-video { display: none; }
+.prism-ui { position: relative; min-height: 100svh; pointer-events: none; overflow: hidden; }
+.prism-header { position: absolute; inset: 0 0 auto; height: 91px; margin: 0 38px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ffffff13; }
+.prism-brand { pointer-events: auto; color: inherit; text-decoration: none; display: flex; align-items: center; gap: 13px; font-size: 13px; letter-spacing: .18em; font-weight: 600; }
+.prism-mark { width: 21px; height: 23px; border: 1px solid #d9dbe1; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: linear-gradient(115deg, #fff1 30%, #fac9ad 45%, #c7c5fc 60%, #b5e9df 75%, #fff1 90%); }
+.prism-status { display: flex; gap: 9px; align-items: center; font-size: 10px; letter-spacing: .13em; color: #a3a6af; }
+.prism-status i { width: 5px; height: 5px; background: #c3c0df; border-radius: 50%; box-shadow: 0 0 9px #c3c0df70; }
+.camera-live .prism-status i { background: #aff2cf; }
+.prism-intro { position: absolute; top: 145px; left: 40px; }
+.prism-eyebrow { color: #a9a9b5; font-size: 9px; letter-spacing: .24em; margin: 0 0 22px; }
+.prism-intro h1 { font-size: clamp(32px, 3.5vw, 51px); font-weight: 400; letter-spacing: -.065em; line-height: 1.35; margin: 0; }
+.prism-intro h1 em { font-style: normal; background: linear-gradient(110deg,#f0bbaa,#c3c2ff,#b2ddd3); color: transparent; background-clip: text; }
+.prism-intro > p:last-child { color: #8d8e9b; font-size: 11px; line-height: 1.9; margin-top: 22px; }
+.camera-live .prism-intro { opacity: 0; transition: opacity .6s; }
+.prism-side { position: absolute; top: 125px; right: 40px; color: #797b89; font-size: 9px; letter-spacing: .18em; writing-mode: vertical-rl; }
+.prism-caption { position: absolute; left: 40px; bottom: 125px; }
+.prism-caption span { color: #787b89; font-size: 9px; letter-spacing: .2em; }
+.prism-caption p { font-size: 11px; color: #b9bbc6; line-height: 1.9; margin: 13px 0 0; }
+.prism-controls { position: absolute; right: 38px; bottom: 112px; width: 242px; pointer-events: auto; padding: 22px; border: 1px solid #ffffff1a; border-radius: 14px; background: #11131c85; backdrop-filter: blur(18px); }
+.prism-control-heading { margin: 0 0 21px; display: flex; justify-content: space-between; color: #b0b1c0; font-size: 9px; letter-spacing: .15em; }
+.prism-control-heading b { font-weight: 400; color: #777b8d; }
+.prism-slider { display: block; margin: 0 0 20px; }
+.prism-slider span { display: flex; justify-content: space-between; font-size: 10px; color: #bbbcc7; margin-bottom: 10px; }
+.prism-slider output { color: #818596; font-variant-numeric: tabular-nums; }
+.prism-slider input { display: block; width: 100%; height: 3px; appearance: none; background: linear-gradient(90deg,#e3b9a9,#aeacf0,#acdacf); border-radius: 2px; cursor: pointer; }
+.prism-slider input::-webkit-slider-thumb { appearance: none; width: 10px; height: 10px; border: 2px solid #e8e5f2; border-radius: 50%; background: #555263; }
+.prism-slider input::-moz-range-thumb { width: 7px; height: 7px; border: 2px solid #e8e5f2; border-radius: 50%; background: #555263; }
+.prism-actions { display: flex; gap: 7px; }
+.prism-actions button { cursor: pointer; border-radius: 6px; min-height: 38px; border: 1px solid #ffffff24; background: #ffffff05; color: #d9dae3; font-size: 10px; padding: 0 12px; }
+.prism-actions .prism-start { flex: 1; color: #17171d; border: 0; background: #e0ddec; }
+.prism-actions button:hover { filter: brightness(1.18); }
+.prism-actions button:disabled { cursor: wait; opacity: .5; }
+.prism-note { font-size: 9px; color: #7e8293; line-height: 1.6; margin: 12px 0 0; }
+.prism-error { font-size: 11px; line-height: 1.7; color: #f4bbad; margin: 0 0 14px; }
+.prism-footer { position: absolute; inset: auto 38px 0; height: 80px; border-top: 1px solid #ffffff13; display: flex; align-items: center; justify-content: space-between; font-size: 9px; color: #777b87; letter-spacing: .13em; }
+.prism-spectrum { display: flex; align-items: center; gap: 13px; }
+.prism-spectrum i { width: 72px; height: 2px; background: linear-gradient(90deg,#e9aa96,#dec997,#b5d8b8,#9ecddb,#afb0ef,#d9a9d2); }
+.prism-percent { color: #bec1ce; font-variant-numeric: tabular-nums; }
+@media (max-width: 700px) {
+  .prism-header { height: 70px; margin: 0 21px; }
+  .prism-brand { font-size: 11px; }
+  .prism-status { font-size: 8px; letter-spacing: .05em; }
+  .prism-intro { top: 96px; left: 23px; }
+  .prism-intro h1 { font-size: 29px; }
+  .prism-eyebrow { font-size: 8px; margin-bottom: 12px; }
+  .prism-intro > p:last-child { display: none; }
+  .prism-side { right: 23px; top: 94px; font-size: 8px; }
+  .prism-caption { left: 23px; bottom: 247px; }
+  .prism-caption span { display: none; }
+  .prism-caption p { font-size: 10px; }
+  .prism-controls { right: 20px; left: 20px; bottom: 64px; width: auto; padding: 16px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+  .prism-control-heading { grid-column: 1 / -1; margin-bottom: 17px; }
+  .prism-slider { margin-bottom: 18px; }
+  .prism-actions, .prism-note, .prism-error { grid-column: 1 / -1; }
+  .prism-note { margin-top: 9px; }
+  .prism-footer { left: 22px; right: 22px; height: 48px; font-size: 8px; }
+  .prism-footer > span { letter-spacing: .02em; }
+}
+@media (max-height: 620px) and (min-width: 701px) {
+  .prism-header { height: 65px; }
+  .prism-intro { top: 92px; }
+  .prism-intro h1 { font-size: 32px; }
+  .prism-controls { bottom: 73px; padding: 15px; }
+  .prism-caption { bottom: 85px; }
+  .prism-footer { height: 54px; }
+}

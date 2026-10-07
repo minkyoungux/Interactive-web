@@ -1,0 +1,100 @@
+.universal-capture {
+  position: fixed;
+  z-index: 2147483000;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.capture-status {
+  min-height: 19px;
+  margin: 0;
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, .82);
+  background: rgba(7, 10, 8, .48);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  font: 700 9px/1.2 'DM Sans', system-ui, sans-serif;
+  letter-spacing: .08em;
+  white-space: nowrap;
+  transition: opacity .2s ease;
+}
+
+.capture-status.show { opacity: 1; }
+.capture-status.recording { color: #ffaaa2; }
+
+.capture-button {
+  position: relative;
+  width: 66px;
+  height: 66px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(9, 12, 10, .16);
+  box-shadow: 0 0 0 5px rgba(7, 10, 8, .3), 0 8px 28px rgba(0, 0, 0, .28);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: none;
+  transition: border-color .2s ease, transform .18s ease, background .2s ease;
+}
+
+.capture-button::after {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0);
+  transition: border-radius .22s ease, background .22s ease, inset .22s ease;
+}
+
+.capture-button:hover { background: rgba(255, 255, 255, .08); }
+.capture-button:active,
+.capture-button.is-holding { transform: scale(.92); }
+.capture-button:focus-visible { outline: 2px solid #fff; outline-offset: 8px; }
+
+.capture-button.is-holding::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border: 2px solid rgba(255, 255, 255, .56);
+  border-top-color: #ff5149;
+  border-radius: 50%;
+  animation: capture-hold .58s linear forwards;
+}
+
+.capture-button.is-recording {
+  border-color: #ff5149;
+  background: rgba(52, 5, 5, .18);
+  box-shadow: 0 0 0 5px rgba(38, 5, 5, .3), 0 8px 30px rgba(239, 39, 32, .18);
+}
+
+.capture-button.is-recording::after {
+  inset: 17px;
+  border-radius: 6px;
+  background: #f0443c;
+}
+
+@keyframes capture-hold { to { transform: rotate(360deg); } }
+
+@media (max-width: 720px) {
+  .universal-capture { bottom: max(12px, env(safe-area-inset-bottom)); }
+  .capture-button { width: 60px; height: 60px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .capture-button.is-holding::before { animation-duration: .01ms; }
+}

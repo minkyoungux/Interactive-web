@@ -1,0 +1,41 @@
+:root { font-family: 'Courier New', ui-monospace, monospace; color: #242ba5; background: #e8e1ca; font-synthesis: none; }
+* { box-sizing: border-box; }
+html, body, #app { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { min-width: 320px; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid #242ba5; outline-offset: 4px; }
+.type-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; }
+.type-camera { display: none; }
+.type-header { position: absolute; top: max(24px, env(safe-area-inset-top)); left: max(28px, env(safe-area-inset-left)); right: max(28px, env(safe-area-inset-right)); display: flex; justify-content: space-between; align-items: flex-start; pointer-events: none; gap: 15px; }
+.type-brand { color: inherit; text-decoration: none; pointer-events: auto; }
+.type-brand strong { display: block; font-size: clamp(21px, 3vw, 30px); font-weight: 400; letter-spacing: -.06em; }
+.type-brand small { display: block; margin-top: 5px; font-size: 12px; letter-spacing: .035em; opacity: .75; }
+.type-state { font-family: system-ui, sans-serif; font-size: 13px; text-align: right; max-width: 220px; line-height: 1.6; margin: 1px 0; }
+.type-controls { position: absolute; left: max(28px, env(safe-area-inset-left)); bottom: max(25px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 10px; max-width: 260px; }
+.type-buttons { display: flex; gap: 7px; flex-wrap: wrap; }
+.type-buttons button { font-family: system-ui, sans-serif; font-size: 13px; min-height: 37px; padding: 6px 11px; border: 1px solid #242ba54a; background: #efe8d4dc; border-radius: 3px; }
+.type-buttons button:hover { background: #242ba5; color: #f5efda; }
+.type-buttons button:disabled { opacity: .6; cursor: wait; }
+.type-buttons button[aria-pressed='true'] { background: #242ba5; color: #f5efda; }
+.type-word { display: flex; gap: 10px; align-items: center; font-size: 13px; }
+.type-word input { width: 120px; background: transparent; border: 0; border-bottom: 1px solid #242ba57a; border-radius: 0; font-size: 17px; padding: 5px 0; }
+.type-guide { position: absolute; right: max(28px, env(safe-area-inset-right)); bottom: max(30px, env(safe-area-inset-bottom)); width: 230px; margin: 0; font-family: system-ui, sans-serif; font-size: 13px; line-height: 1.85; word-break: keep-all; }
+.type-error { position: absolute; left: 28px; bottom: 180px; max-width: 350px; padding: 15px; background: #f3eddb; border: 1px solid #242ba54a; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.6; }
+.type-error[hidden] { display: none; }
+.type-count { position: absolute; right: 28px; top: 100px; font-size: 12px; opacity: .7; pointer-events: none; }
+/* Keep the shared recorder visible against paper. */
+.universal-capture { filter: drop-shadow(0 1px 3px #242ba548); }
+@media (max-width: 680px) {
+  .type-header { left: 17px; right: 17px; top: max(18px, env(safe-area-inset-top)); }
+  .type-brand strong { font-size: 23px; }
+  .type-state { max-width: 138px; font-size: 12px; }
+  .type-controls { left: 17px; bottom: max(15px, env(safe-area-inset-bottom)); max-width: calc(50% - 32px); gap: 7px; }
+  .type-buttons { gap: 5px; }
+  .type-buttons button { font-size: 12px; padding: 5px 7px; min-height: 34px; }
+  .type-word { gap: 7px; font-size: 12px; }
+  .type-word input { width: 76px; font-size: 16px; }
+  .type-guide { right: 17px; width: calc(50% - 48px); bottom: max(19px, env(safe-area-inset-bottom)); font-size: 12px; }
+  .type-count { top: 95px; right: 17px; }
+  .type-error { left: 17px; right: 17px; bottom: 177px; }
+}
