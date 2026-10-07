@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { supabaseUrl as url, supabasePublishableKey as key } from './supabase-config'
 import './guestbook.css'
+import { mountStickers } from './guestbook-stickers'
 
 const colors = ['butter', 'rose', 'mint', 'sky', 'lavender'] as const
 const colorNames = ['버터 옐로', '로즈 핑크', '민트', '하늘색', '라벤더']
@@ -55,6 +56,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
   </main><footer><a class="start-button" href="${import.meta.env.BASE_URL}">▦ Start</a><span class="task-active">▤ Guestbook Explorer</span><span class="task-clock">♡ Connected · ${new Intl.DateTimeFormat('ko-KR', { month: '2-digit', day: '2-digit' }).format(new Date())}</span></footer>
 `
+
+mountStickers()
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id)! as T
 const form = el<HTMLFormElement>('guest-form')
