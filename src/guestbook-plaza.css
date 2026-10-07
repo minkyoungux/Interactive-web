@@ -8,7 +8,9 @@
 .plaza-person { position: absolute; width: 72px; border: 0; background: none; padding: 0; cursor: pointer; transform: translateX(-50%); color: #5e4774; }
 .plaza-person .minimi svg { width: 62px; height: 74px; animation: plaza-walk .65s steps(2) infinite; }
 .plaza-name { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 10px Tahoma,sans-serif; background: #fff9; padding: 3px; border: 1px solid #c8bad9; }
-.plaza-greeting { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: 110px; padding: 7px; border: 1px solid #bfa3d0; border-radius: 8px; background: #fffbea; font: 10px Tahoma,sans-serif; }
+.plaza-greeting { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: 132px; padding: 8px; border: 1px solid #bfa3d0; border-radius: 8px; background: #fffbea; font: 10px/1.6 Tahoma,sans-serif; word-break: keep-all; pointer-events: none; }
+.plaza-person.is-chatting .plaza-greeting,.plaza-person.is-fed .plaza-greeting { display: block; }
+.plaza-person.is-chatting,.plaza-person.is-fed { z-index: 102 !important; }
 .plaza-person:hover,.plaza-person:focus-visible { z-index: 101 !important; }.plaza-person:hover .plaza-greeting,.plaza-person:focus-visible .plaza-greeting { display: block; }
 .plaza-person:hover svg,.plaza-person:focus-visible svg,.is-paused .plaza-person svg { animation-play-state: paused; }
 .plaza-caption,.plaza-empty { font: 11px Tahoma,sans-serif; line-height: 1.6; color: #615178; padding: 5px 8px; margin: 0; }.plaza-empty { position: absolute; inset: 115px 20px auto; text-align: center; }
