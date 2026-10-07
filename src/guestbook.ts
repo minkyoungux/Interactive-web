@@ -7,6 +7,7 @@ import { minimi, mountMinimi } from './guestbook-minimi'
 import { mountPlaza } from './guestbook-plaza'
 import { mountPaperTouch } from './guestbook-touch'
 import { mountStardust } from './guestbook-stardust'
+import { mountMusic } from './guestbook-music'
 
 const colors = ['butter', 'rose', 'mint', 'sky', 'lavender'] as const
 const colorNames = ['버터 옐로', '로즈 핑크', '민트', '하늘색', '라벤더']
@@ -66,6 +67,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
 mountStickers()
 mountStardust()
+mountMusic()
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id)! as T
 const form = el<HTMLFormElement>('guest-form')

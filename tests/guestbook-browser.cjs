@@ -77,6 +77,16 @@ const expect = locator => {
     await page.goto(origin + 'guestbook.html')
     await expect(page.locator('.note')).toHaveCount(3)
     await expect(page.locator('#connection-status')).toContainText('실시간 연결')
+    await page.route('https://open.spotify.com/embed/**', route => route.fulfill({ contentType: 'text/html', body: '<p>Spotify mock player</p>' }))
+    await expect(page.locator('.bgm-player iframe')).toHaveCount(0)
+    for (const [i, id] of ['1aKvZDoLGkNMxoRYgkckZG','7Jpb9OejYYIwsBIVQwceRy','3r8RuvgbX9s7ammBn07D3W'].entries()) {
+      await page.locator(`[data-song="${i}"]`).click()
+      await expect(page.locator('.bgm-player iframe')).toHaveCount(1)
+      assert.ok((await page.locator('.bgm-player iframe').getAttribute('src')).includes(id))
+      assert.equal(await page.locator('.bgm-link').getAttribute('href'), `https://open.spotify.com/track/${id}`)
+    }
+    await page.locator('.bgm-close').click()
+    await expect(page.locator('.bgm-player iframe')).toHaveCount(0)
     await page.mouse.move(400, 150)
     await page.mouse.move(550, 240, { steps: 12 })
     await page.waitForFunction(() => {
