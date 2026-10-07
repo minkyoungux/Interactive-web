@@ -10,6 +10,7 @@ import { mountStardust } from './guestbook-stardust'
 import { mountMusic } from './guestbook-music'
 import { mountDailyCat } from './guestbook-cat'
 import { mountNostalgia } from './guestbook-nostalgia'
+import { mountPlay, mountStamp, splitStamp } from './guestbook-play'
 
 const colors = ['butter', 'rose', 'mint', 'sky', 'lavender'] as const
 const colorNames = ['버터 옐로', '로즈 핑크', '민트', '하늘색', '라벤더']
@@ -72,6 +73,8 @@ mountStardust()
 mountMusic()
 mountDailyCat()
 mountNostalgia()
+mountPlay()
+const postage = mountStamp()
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id)! as T
 const form = el<HTMLFormElement>('guest-form')
@@ -126,7 +129,8 @@ function merge(rows: unknown[], animate = false) {
       note.style.setProperty('--tilt', `${tilt * .6}deg`)
       const text = document.createElement('p')
       text.className = 'note-message'
-      text.textContent = row.message
+      const stamped = splitStamp(row.message)
+      text.textContent = stamped.text
       const bottom = document.createElement('div')
       bottom.className = 'note-bottom'
       const author = document.createElement('strong')
@@ -147,6 +151,11 @@ function merge(rows: unknown[], animate = false) {
       note.append(title)
       if (Number.isInteger(row.minimi_seed) && row.minimi_seed! >= 0 && row.minimi_seed! <= 2147483647) note.append(minimi(row.minimi_seed!))
       note.append(text, bottom)
+      if (stamped.stamp) {
+        const stamp = document.createElement('span')
+        stamp.className = 'note-postage'; stamp.textContent = stamped.stamp
+        note.append(stamp)
+      }
       attachReplies?.(note, row.id)
       nodes.set(row.id, note)
     }
@@ -228,10 +237,15 @@ form.addEventListener('submit', async event => {
     formStatus.textContent = '주사위가 멈추면 작성할 수 있어요!'
     return
   }
-  const author = nameInput.value.trim(), message = messageInput.value.trim()
-  if (!author || !message) {
+  const author = nameInput.value.trim(), rawMessage = messageInput.value.trim()
+  const message = rawMessage + postage.suffix()
+  if (!author || !rawMessage) {
     formStatus.textContent = '이름과 하고 싶은 말을 모두 적어주세요.'
     ;(!author ? nameInput : messageInput).focus()
+    return
+  }
+  if (message.length > 500) {
+    formStatus.textContent = '우표 문구까지 500자 이내로 남길 수 있어요. 글을 조금 줄여주세요.'
     return
   }
   const color = String(new FormData(form).get('color'))
@@ -255,6 +269,7 @@ form.addEventListener('submit', async event => {
     if (error || !isEntry(data)) throw error ?? new Error('Invalid entry')
     merge([data], true)
     messageInput.value = ''
+    postage.reset()
     el('char-count').textContent = '0 / 500'
     draftId = undefined
     formStatus.textContent = '마음이 도착했어요. 방명록에 붙였어요!'

@@ -9,6 +9,52 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
   const pause = host.querySelector<HTMLButtonElement>('.plaza-pause')!
   const motion = matchMedia('(prefers-reduced-motion: reduce)')
   const scene = host.querySelector<HTMLElement>('.plaza-scene')!
+  const snacks = document.createElement('div')
+  snacks.className = 'plaza-snacks'
+  snacks.innerHTML = '<button type="button" data-snack="커피">☕ 커피</button><button type="button" data-snack="붕어빵">🐟 붕어빵</button><span role="status">간식을 끌어 주거나, 고른 뒤 미니미를 눌러줘。</span>'
+  scene.before(snacks)
+  let snack = ''
+  let consumedDrag = false
+  const snackGhost = document.createElement('span')
+  snackGhost.className = 'snack-ghost'; snackGhost.hidden = true
+  document.body.append(snackGhost)
+  const fed = new Map<string, number>()
+  const feed = (button: HTMLButtonElement) => {
+    if (!snack) return
+    fed.set(button.dataset.entryId!, performance.now() + 3500)
+    button.classList.add('is-fed')
+    setTimeout(() => button.classList.remove('is-fed'), 3500)
+    button.querySelector('.plaza-greeting')!.textContent = `${snack} 냠… 이 은혜 월급날 갚을게。`
+    snacks.querySelector('span')!.textContent = `${snack} 잘 먹었어…♡`
+    snack = ''
+    snacks.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed','false'))
+  }
+  snacks.querySelectorAll<HTMLButtonElement>('button').forEach(b => {
+    b.setAttribute('aria-pressed','false')
+    b.onclick = () => {
+      if (consumedDrag) { consumedDrag = false; return }
+      snack = b.dataset.snack!
+      snacks.querySelectorAll('button').forEach(n=>n.setAttribute('aria-pressed',String(n===b)))
+      snacks.querySelector('span')!.textContent = `${snack} 준비 완료… 미니미를 골라줘。`
+    }
+    b.onpointerdown = e => { b.click(); b.setPointerCapture(e.pointerId) }
+    b.onpointermove = e => {
+      if (!b.hasPointerCapture(e.pointerId)) return
+      snackGhost.hidden=false;snackGhost.textContent=b.dataset.snack==='커피'?'☕':'🐟'
+      snackGhost.style.left=`${e.clientX}px`;snackGhost.style.top=`${e.clientY}px`
+      pointer.x=e.clientX;pointer.y=e.clientY;pointer.active=true;pointer.speed=0
+    }
+    b.onpointerup = e => {
+      snackGhost.hidden=true;pointer.active=false
+      const target = document.elementFromPoint(e.clientX,e.clientY)?.closest<HTMLButtonElement>('.plaza-person')
+      if(target) { feed(target); consumedDrag=true;setTimeout(()=>{consumedDrag=false},0);e.preventDefault() }
+    }
+    b.onpointercancel = () => { snackGhost.hidden=true;pointer.active=false }
+  })
+  scene.addEventListener('click', e => {
+    const target = (e.target as HTMLElement).closest<HTMLButtonElement>('.plaza-person')
+    if(snack && target) { e.stopImmediatePropagation(); e.preventDefault(); feed(target) }
+  }, true)
   const pointer = { x: 0, y: 0, active: false, time: 0, speed: 0, since: 0 }
   scene.addEventListener('pointermove', e => {
     if (e.pointerType !== 'mouse') return
@@ -43,7 +89,9 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
       const distance = Math.hypot(vx, vy)
       const near = pointer.active && distance < 150 && !motion.matches
       const greeting = p.button.querySelector<HTMLElement>('.plaza-greeting')!
-      if (near && pointer.speed > .9 && now - pointer.time < 90 && now > p.cooldown) {
+      if ((fed.get(p.button.dataset.entryId!) ?? 0) > now) continue
+      p.button.classList.remove('is-fed')
+      if (near && !snack && pointer.speed > .9 && now - pointer.time < 90 && now > p.cooldown) {
         p.fear = now + 700; p.cooldown = now + 1700
         p.dx = -vx / Math.max(distance, 1) * 24; p.dy = -vy / Math.max(distance, 1) * 34
         p.remaining = 1.4
@@ -55,11 +103,11 @@ export function mountPlaza(host: HTMLElement, visit: (id: string) => void) {
       p.button.style.setProperty('--gaze-y', near ? `${Math.max(-.7, Math.min(.7, vy / 65))}px` : '0px')
       p.button.style.setProperty('--head-x', near ? `${Math.sign(vx)}px` : '0px')
       p.button.style.setProperty('--head-angle', near ? `${Math.max(-5, Math.min(5, vx / 15))}deg` : '0deg')
-      greeting.textContent = scared ? '앗, 깜짝이야…!' : near ? '뭐 하고 있어? ♡' : '안녕! 내 메모 볼래? ♡'
+      greeting.textContent = near && snack ? '나도 한 입…♡' : scared ? '앗, 깜짝이야…!' : near ? '뭐 하고 있어? ♡' : '안녕! 내 메모 볼래? ♡'
       if ((p.hovering && !scared) || p.button.matches(':focus-visible')) continue
       if (near && !scared) {
         if (now - pointer.since > 550 && distance > 65) {
-          p.dx = vx / distance * 3; p.dy = vy / distance * 6
+          p.dx = vx / distance * (snack ? 12 : 3); p.dy = vy / distance * (snack ? 18 : 6)
         } else { p.dx = 0; p.dy = 0 }
         p.remaining = .3
       }
