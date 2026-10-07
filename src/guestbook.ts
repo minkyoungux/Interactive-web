@@ -10,45 +10,50 @@ const fields = 'id,author,message,color,created_at'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="guest-header">
-    <a class="guest-brand" href="${import.meta.env.BASE_URL}"><span class="brand-symbol" aria-hidden="true">✧</span><span>INTERACTIVE<small>LAB · DREAM DIARY</small></span></a>
+    <a class="guest-brand" href="${import.meta.env.BASE_URL}"><span class="brand-symbol" aria-hidden="true">▦</span><span>Interactive Lab<small>Guestbook Explorer</small></span></a>
     <a class="back-link" href="${import.meta.env.BASE_URL}">작품으로 돌아가기 <span aria-hidden="true">↗</span></a>
   </header>
   <main>
     <section class="intro">
-      <div class="orbit orbit-one" aria-hidden="true"></div><div class="orbit orbit-two" aria-hidden="true"></div>
-      <span class="dream-spark spark-one" aria-hidden="true">✧</span><span class="dream-spark spark-two" aria-hidden="true">✦</span><span class="dream-spark spark-three" aria-hidden="true">✧</span>
-      <span class="dream-heart" aria-hidden="true">♡</span>
-      <p class="eyebrow"><span aria-hidden="true">✳</span> A TINY CORNER OF OUR UNIVERSE</p>
-      <h1>Dream <em>diary</em><span class="title-star" aria-hidden="true">✶</span><span class="sr-only">방명록</span></h1>
-      <p class="intro-copy">꿈에서 만난 것처럼, 우연히 여기에.<br>오늘의 기분을 살짝 남겨줘 <span aria-hidden="true">♡</span></p>
-      <span class="hero-sticker">you were here! <span aria-hidden="true">↗</span></span>
-      <div class="dream-strip" aria-hidden="true"><span>˚ ༘♡ little messages</span><span>made of stardust ✧</span><span>stay a little longer ♡</span></div>
+      <div class="planet" aria-hidden="true"><span>✦</span></div>
+      <span class="desktop-star star-one" aria-hidden="true">✦</span><span class="desktop-star star-two" aria-hidden="true">✧</span>
+      <div class="hero-copy"><p class="eyebrow">★ WELCOME TO MY LITTLE HOMEPAGE ★</p>
+      <h1>GUEST<br><span>BOOK</span><em>Club!</em><span class="sr-only">방명록</span></h1>
+      <p class="intro-copy">인터넷 어딘가에서 만난 우리.<br>그냥 가기 없기! 방명록에 흔적 남겨줘 ♡</p>
+      <a class="hero-write" href="#guest-name">➜ Click here to leave a note!</a></div>
+      <div class="welcome-window"><div class="window-title">Welcome.exe <span class="window-dots" aria-hidden="true">— □ ×</span></div>
+        <div class="window-menu" aria-hidden="true">File&nbsp;&nbsp; Edit&nbsp;&nbsp; View&nbsp;&nbsp; Favorites</div>
+        <div class="welcome-screen"><div class="pixel-computer" aria-hidden="true"><div class="monitor"><span>♥</span></div><div class="computer-base"></div></div><b>You've got a visitor!</b><p>작은 인사 한 줄도 환영합니다.</p><span class="online-badge">● YOU ARE NOW CONNECTED</span></div>
+        <div class="window-status">♡ Best viewed with an open heart.</div>
+      </div>
+      <div class="mini-window" aria-hidden="true"><div class="window-title">My mood today <span>×</span></div><p>100% <span>ONLINE</span></p><div class="progress-blocks"></div></div>
+      <div class="dream-strip"><span>✦ HELLO, WORLD!</span><span>방명록에 오신 것을 환영합니다 ♡</span><span>MAKE YOURSELF AT HOME ✦</span></div>
     </section>
     <div class="guest-layout">
       <aside class="composer">
-        <div class="compose-heading"><span><i aria-hidden="true">♡</i> new_message.txt</span><span class="window-dots" aria-hidden="true">— □ ×</span></div>
+        <div class="compose-heading"><span>▤ Sign Guestbook</span><span class="window-dots" aria-hidden="true">— □ ×</span></div>
         <form id="guest-form">
           <fieldset id="write-fields" disabled>
-            <label for="guest-name">from. <span>이름 또는 별명</span></label>
+            <label for="guest-name">ScreenName <span>이름 또는 별명</span></label>
             <input id="guest-name" name="author" maxlength="30" required autocomplete="nickname" placeholder="너의 이름은?" />
-            <label for="guest-message">dear diary, <span>하고 싶은 말</span></label>
+            <label for="guest-message">Message <span>하고 싶은 말</span></label>
             <textarea id="guest-message" name="message" rows="7" maxlength="500" required placeholder="오늘의 조각을 여기에… ♡"></textarea>
             <div class="message-count"><span>모두에게 공개되는 글이에요.</span><span id="char-count">0 / 500</span></div>
             <fieldset class="color-picker"><legend>포스트잇 색상</legend>${colors.map((color, i) => `<label class="swatch" style="--swatch:var(--${color})"><input type="radio" name="color" value="${color}" ${i === 0 ? 'checked' : ''}/><span title="${colorNames[i]}"><span class="sr-only">${colorNames[i]}</span></span></label>`).join('')}</fieldset>
-            <button class="submit-button" type="submit">작성하기 <span aria-hidden="true">send with love ↗</span></button>
+            <button class="submit-button" type="submit">작성하기 <span aria-hidden="true">Send message ➜</span></button>
           </fieldset>
           <p id="form-status" role="status" aria-live="polite"></p>
         </form>
-        <p class="compose-foot">₊˚⊹ a little note, a little magic ⊹˚₊</p>
+        <p class="compose-foot">✉ 보내주신 마음은 소중하게 보관됩니다.</p>
       </aside>
       <section class="board-section" aria-labelledby="board-title">
-        <div class="board-heading"><h2 id="board-title"><span class="board-star" aria-hidden="true">✧</span> our little notes <span id="note-count">0</span></h2><div class="board-tools"><span id="connection-status" role="status">연결 중</span><button id="refresh" type="button">새로고침 ↻</button></div></div>
+        <div class="board-heading"><h2 id="board-title">▤ Guestbook entries <span id="note-count">0</span></h2><div class="board-tools"><span id="connection-status" role="status">연결 중</span><button id="refresh" type="button">새로고침 ↻</button></div></div>
         <p id="board-status" role="status" aria-live="polite">방명록을 불러오고 있어요.</p>
         <div id="note-board" class="note-board" aria-busy="true"></div>
         <button id="load-more" class="load-more" type="button" hidden>이전 방명록 더 보기 ↓</button>
       </section>
     </div>
-  </main><footer>INTERACTIVE LAB <span>see you in another dream ♡</span><span>✧ DREAM DIARY CLUB</span></footer>
+  </main><footer><a class="start-button" href="${import.meta.env.BASE_URL}">▦ Start</a><span class="task-active">▤ Guestbook Explorer</span><span class="task-clock">♡ Connected · ${new Intl.DateTimeFormat('ko-KR', { month: '2-digit', day: '2-digit' }).format(new Date())}</span></footer>
 `
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id)! as T
@@ -103,7 +108,16 @@ function merge(rows: unknown[], animate = false) {
       time.dateTime = row.created_at
       time.textContent = new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(row.created_at))
       bottom.append(author, time)
-      note.append(text, bottom)
+      const title = document.createElement('div')
+      title.className = 'note-title'
+      const filename = document.createElement('span')
+      filename.textContent = `${row.author}.txt`
+      const chrome = document.createElement('span')
+      chrome.className = 'window-dots'
+      chrome.setAttribute('aria-hidden', 'true')
+      chrome.textContent = '— □ ×'
+      title.append(filename, chrome)
+      note.append(title, text, bottom)
       nodes.set(row.id, note)
     }
     board.append(note)
