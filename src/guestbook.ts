@@ -4,6 +4,7 @@ import './guestbook.css'
 import { mountStickers } from './guestbook-stickers'
 import { createReplies } from './guestbook-replies'
 import { minimi, mountMinimi } from './guestbook-minimi'
+import { mountPlaza } from './guestbook-plaza'
 
 const colors = ['butter', 'rose', 'mint', 'sky', 'lavender'] as const
 const colorNames = ['버터 옐로', '로즈 핑크', '민트', '하늘색', '라벤더']
@@ -51,6 +52,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <p class="compose-foot">✉ 보내주신 마음은 소중하게 보관됩니다.</p>
       </aside>
       <section class="board-section" aria-labelledby="board-title">
+        <section id="minimi-plaza" class="minimi-plaza" aria-label="미니미 광장"></section>
         <div class="board-heading"><h2 id="board-title">▤ Guestbook entries <span id="note-count">0</span></h2><div class="board-tools"><span id="connection-status" role="status">연결 중</span><button id="refresh" type="button">새로고침 ↻</button></div></div>
         <p id="board-status" role="status" aria-live="polite">방명록을 불러오고 있어요.</p>
         <div id="note-board" class="note-board" aria-busy="true"></div>
@@ -80,6 +82,14 @@ let loading = false
 let saving = false
 let draftId: string | undefined
 const getMinimiSeed = mountMinimi(el('minimi-maker'), () => { draftId = undefined; formStatus.textContent = '' })
+const updatePlaza = mountPlaza(el('minimi-plaza'), id => {
+  const note = nodes.get(id)
+  if (!note) return
+  document.querySelector('.plaza-selected')?.classList.remove('plaza-selected')
+  note.classList.add('plaza-selected'); note.tabIndex = -1
+  note.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' })
+  note.focus({ preventScroll: true })
+})
 
 function isEntry(row: unknown): row is Entry {
   if (!row || typeof row !== 'object') return false
@@ -137,6 +147,7 @@ function merge(rows: unknown[], animate = false) {
     }
   }
   el('note-count').textContent = String(entries.size)
+  updatePlaza(sorted)
   if (entries.size) boardStatus.textContent = ''
 }
 
@@ -203,6 +214,10 @@ form.addEventListener('input', () => {
 form.addEventListener('submit', async event => {
   event.preventDefault()
   if (!supabase || saving) return
+  if (el('minimi-maker').getAttribute('aria-busy') === 'true') {
+    formStatus.textContent = '주사위가 멈추면 작성할 수 있어요!'
+    return
+  }
   const author = nameInput.value.trim(), message = messageInput.value.trim()
   if (!author || !message) {
     formStatus.textContent = '이름과 하고 싶은 말을 모두 적어주세요.'

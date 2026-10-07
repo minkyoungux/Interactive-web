@@ -1,0 +1,17 @@
+.minimi-plaza { margin-bottom: 22px; padding: 4px; background: #c0c0c0; box-shadow: var(--outset); }
+.plaza-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: linear-gradient(90deg,#4c4c9e,#c79bce); color: white; padding: 7px 9px; font: 12px Tahoma,sans-serif; }
+.plaza-pause { background: #dcd9e7; color: #473666; border: 0; box-shadow: var(--outset); padding: 5px 8px; cursor: pointer; font-size: 10px; }
+.plaza-scene { position: relative; height: 270px; overflow: hidden; background: linear-gradient(180deg,#c9eefd 0%,#eedcff 48%,#e1ebd9 49%,#c9e4d9 100%); }
+.plaza-scene::before { content: ''; position: absolute; inset: 50% 0 0; background-image: linear-gradient(#fff5 1px,transparent 1px),linear-gradient(90deg,#fff5 1px,transparent 1px); background-size: 28px 28px; transform: perspective(140px) rotateX(20deg); }
+.plaza-decor { display: flex; justify-content: space-around; align-items: center; padding: 18px 5px; color: #8674b1; font: 10px monospace; letter-spacing: 2px; }.plaza-decor span { font-size: 27px; color: white; text-shadow: 2px 2px #c79ccc; }
+.plaza-residents { position: absolute; top: 82px; bottom: 106px; left: 40px; right: 40px; }
+.plaza-person { position: absolute; width: 72px; border: 0; background: none; padding: 0; cursor: pointer; transform: translateX(-50%); color: #5e4774; }
+.plaza-person .minimi svg { width: 62px; height: 74px; animation: plaza-walk .65s steps(2) infinite; }
+.plaza-name { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 10px Tahoma,sans-serif; background: #fff9; padding: 3px; border: 1px solid #c8bad9; }
+.plaza-greeting { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: 110px; padding: 7px; border: 1px solid #bfa3d0; border-radius: 8px; background: #fffbea; font: 10px Tahoma,sans-serif; }
+.plaza-person:hover,.plaza-person:focus-visible { z-index: 101 !important; }.plaza-person:hover .plaza-greeting,.plaza-person:focus-visible .plaza-greeting { display: block; }
+.plaza-person:hover svg,.plaza-person:focus-visible svg,.is-paused .plaza-person svg { animation-play-state: paused; }
+.plaza-caption,.plaza-empty { font: 11px Tahoma,sans-serif; line-height: 1.6; color: #615178; padding: 5px 8px; margin: 0; }.plaza-empty { position: absolute; inset: 115px 20px auto; text-align: center; }
+.note.plaza-selected { outline: 3px solid #be75d1; outline-offset: 5px; }
+@keyframes plaza-walk { 50% { transform: translateY(-3px) rotate(3deg); } }
+@media (prefers-reduced-motion: reduce) { .plaza-person .minimi svg { animation: none; } }

@@ -9,6 +9,9 @@
 .minimi-roll:active { box-shadow: var(--inset); }.minimi-roll:disabled { opacity: .5; cursor: wait; }
 .minimi-hint { margin: 10px 8px 0; font-size: 10px; line-height: 1.6; color: #6b567b; }
 .note > .minimi { margin: 12px 14px 0; padding: 7px; border: 1px dashed #ab91bd; background: #fff5; }.note > .minimi svg { width: 88px; height: 104px; }
-.is-rolling svg { animation: minimi-roll .4s steps(4); }
+.is-rolling svg { animation: minimi-roll .4s steps(4) infinite; }
+.minimi-dice { display: inline-block; vertical-align: middle; font-size: 27px; line-height: 1; color: #8854aa; }
+.is-rolling .minimi-dice { animation: dice-tumble .3s linear infinite; }
+@keyframes dice-tumble { 50% { transform: translateY(-7px) rotate(180deg); } 100% { transform: rotate(360deg); } }
 @keyframes minimi-roll { 25% { transform: rotate(-10deg) translateY(-6px); } 75% { transform: rotate(10deg) translateY(-4px); } }
-@media (prefers-reduced-motion: reduce) { .is-rolling svg { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .is-rolling svg,.is-rolling .minimi-dice { animation: none; } }

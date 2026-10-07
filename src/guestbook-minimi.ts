@@ -37,14 +37,34 @@ export function mountMinimi(host: HTMLElement, changed: () => void) {
   host.innerHTML = '<div class="minimi-title">♡ My Minimi.exe <span>CHARACTER MAKER</span></div><div class="minimi-preview"></div><button type="button" class="minimi-roll">⚄ 주사위 돌리기</button><p class="minimi-hint" aria-live="polite">마음에 들 때까지! 이 미니미가 메모와 함께 남아요.</p>'
   const preview = host.querySelector('.minimi-preview')!
   const button = host.querySelector<HTMLButtonElement>('button')!
-  const render = () => preview.replaceChildren(minimi(seed))
+  const render = (value = seed) => preview.replaceChildren(minimi(value))
+  const dice = document.createElement('span'); dice.className = 'minimi-dice'; dice.textContent = '⚄'; dice.setAttribute('aria-hidden', 'true')
+  button.replaceChildren(dice, document.createTextNode(' 주사위 돌리기'))
+  let rolling = false, timer = 0
   render()
   button.addEventListener('click', () => {
-    seed = randomSeed(); render(); changed()
-    preview.classList.remove('is-rolling')
-    void (preview as HTMLElement).offsetWidth
+    if (rolling) return
+    rolling = true; button.disabled = true; host.setAttribute('aria-busy', 'true')
     preview.classList.add('is-rolling')
-    host.querySelector('.minimi-hint')!.textContent = '새로운 나 등장! 마음에 들면 아래 작성하기를 눌러줘 ♡'
+    button.classList.add('is-rolling')
+    const hint = host.querySelector('.minimi-hint')!
+    hint.textContent = '데굴데굴… 어떤 내가 나올까?'
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+    let step = 0
+    const finish = () => {
+      seed = randomSeed(); render(); changed()
+      rolling = false; button.disabled = false; host.setAttribute('aria-busy', 'false')
+      preview.classList.remove('is-rolling'); button.classList.remove('is-rolling')
+      dice.textContent = ['⚀','⚁','⚂','⚃','⚄','⚅'][seed % 6]
+      hint.textContent = '짜잔! 새로운 나 등장 ♡ 이 모습으로 메모를 남겨봐!'
+    }
+    const tumble = () => {
+      if (reduced || step >= 8) { finish(); return }
+      render(randomSeed()); dice.textContent = ['⚀','⚁','⚂','⚃','⚄','⚅'][step % 6]
+      timer = window.setTimeout(tumble, 65 + step++ * 22)
+    }
+    tumble()
   })
+  window.addEventListener('pagehide', () => clearTimeout(timer), { once: true })
   return () => seed
 }
