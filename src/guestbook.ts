@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { supabaseUrl as url, supabasePublishableKey as key } from './supabase-config'
 import './guestbook.css'
 import { mountStickers } from './guestbook-stickers'
+import { createReplies } from './guestbook-replies'
 
 const colors = ['butter', 'rose', 'mint', 'sky', 'lavender'] as const
 const colorNames = ['버터 옐로', '로즈 핑크', '민트', '하늘색', '라벤더']
@@ -121,6 +122,7 @@ function merge(rows: unknown[], animate = false) {
       chrome.textContent = '— □ ×'
       title.append(filename, chrome)
       note.append(title, text, bottom)
+      attachReplies?.(note, row.id)
       nodes.set(row.id, note)
     }
     board.append(note)
@@ -146,6 +148,7 @@ function validConfig() {
 const supabase = validConfig() ? createClient(url, key, {
   auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
 }) : null
+const attachReplies = supabase ? createReplies(supabase) : null
 
 async function load(older = false, quiet = false) {
   if (!supabase || loading) return
