@@ -1,8 +1,10 @@
 import './guestbook-minimi.css'
 
-export function randomSeed() {
+const boySeeds = [2147483600, 2147483601, 2147483602]
+export function randomSeed(boysOnly = false) {
   // Small catalogue IDs keep new selections stable; older random seeds retain their trio mapping.
-  return crypto.getRandomValues(new Uint32Array(1))[0] % 8
+  const catalogue = boysOnly ? boySeeds : [0,1,2,3,4,5,6,7,...boySeeds]
+  return catalogue[crypto.getRandomValues(new Uint32Array(1))[0] % catalogue.length]
 }
 
 export function minimi(seed: number): HTMLElement {
@@ -14,10 +16,11 @@ export function minimi(seed: number): HTMLElement {
   const root = document.createElement('div')
   root.className = 'minimi'
   root.dataset.seed = String(seed)
-  const look = seed >= 0 && seed < 8 ? seed : (seed >>> 0) % 3
-  const labels = ['긴 머리 · 핑크 카디건', '단발 · 하늘색 후드', '양갈래 · 라벤더 리본', '데이지 · 민트 가디건', '땋은 머리 · 데님 멜빵', '파란 리본 · 세일러', '안경 · 피치 후드', '베레모 · 라일락 원피스']
+  const boy = boySeeds.indexOf(seed)
+  const look = boy >= 0 ? 8 + boy : seed >= 0 && seed < 8 ? seed : (seed >>> 0) % 3
+  const labels = ['긴 머리 · 핑크 카디건', '단발 · 하늘색 후드', '양갈래 · 라벤더 리본', '데이지 · 민트 가디건', '땋은 머리 · 데님 멜빵', '파란 리본 · 세일러', '안경 · 피치 후드', '베레모 · 라일락 원피스', '남캐 · 검정 머리와 데님 재킷', '남캐 · 안경과 민트 줄무늬 니트', '남캐 · 헤드폰과 라벤더 후드']
   const crops = ['45 145 435 750', '545 145 400 750', '995 145 515 750']
-  const files = ['mint', 'denim', 'navy', 'peach', 'lilac']
+  const files = ['mint', 'denim', 'navy', 'peach', 'lilac', 'boy-denim', 'boy-knit', 'boy-headphones']
   root.dataset.look = String(look)
   // Viewport crops the approved sheet without redrawing its characters.
   const sprite = look < 3
@@ -36,10 +39,16 @@ export function mountMinimi(host: HTMLElement, changed: () => void) {
   const dice = document.createElement('span'); dice.className = 'minimi-dice'; dice.textContent = '⚄'; dice.setAttribute('aria-hidden', 'true')
   button.replaceChildren(dice, document.createTextNode(' 주사위 돌리기'))
   let rolling = false, timer = 0
+  const filter = document.createElement('select')
+  filter.setAttribute('aria-label', '미니미 뽑기 종류')
+  filter.innerHTML = '<option value="all">전체 미니미 · 11종</option><option value="boys">새 남캐만 · 3종</option>'
+  filter.style.cssText = 'width:100%;padding:7px;margin:8px 0;background:#f6eafa;color:#65507b;border:2px inset white'
+  button.before(filter)
+  filter.addEventListener('change', () => { seed = randomSeed(filter.value === 'boys'); render(); changed() })
   render()
   button.addEventListener('click', () => {
     if (rolling) return
-    rolling = true; button.disabled = true; host.setAttribute('aria-busy', 'true')
+    rolling = true; button.disabled = true; filter.disabled = true; host.setAttribute('aria-busy', 'true')
     preview.classList.add('is-rolling')
     button.classList.add('is-rolling')
     const hint = host.querySelector('.minimi-hint')!
@@ -48,16 +57,16 @@ export function mountMinimi(host: HTMLElement, changed: () => void) {
     let step = 0
     const finish = () => {
       const previousSeed = seed
-      do { seed = randomSeed() } while (seed === previousSeed)
+      do { seed = randomSeed(filter.value === 'boys') } while (seed === previousSeed)
       render(); changed()
-      rolling = false; button.disabled = false; host.setAttribute('aria-busy', 'false')
+      rolling = false; button.disabled = false; filter.disabled = false; host.setAttribute('aria-busy', 'false')
       preview.classList.remove('is-rolling'); button.classList.remove('is-rolling')
       dice.textContent = ['⚀','⚁','⚂','⚃','⚄','⚅'][seed % 6]
       hint.textContent = '짜잔! 새로운 나 등장 ♡ 이 모습으로 메모를 남겨봐!'
     }
     const tumble = () => {
       if (reduced || step >= 8) { finish(); return }
-      render(randomSeed()); dice.textContent = ['⚀','⚁','⚂','⚃','⚄','⚅'][step % 6]
+      render(randomSeed(filter.value === 'boys')); dice.textContent = ['⚀','⚁','⚂','⚃','⚄','⚅'][step % 6]
       timer = window.setTimeout(tumble, 65 + step++ * 22)
     }
     tumble()
