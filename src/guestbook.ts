@@ -10,36 +10,45 @@ const fields = 'id,author,message,color,created_at'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="guest-header">
-    <a class="guest-brand" href="${import.meta.env.BASE_URL}"><span class="brand-symbol" aria-hidden="true">Ⅲ</span><span>INTERACTIVE<small>LAB · GUESTBOOK</small></span></a>
+    <a class="guest-brand" href="${import.meta.env.BASE_URL}"><span class="brand-symbol" aria-hidden="true">✧</span><span>INTERACTIVE<small>LAB · DREAM DIARY</small></span></a>
     <a class="back-link" href="${import.meta.env.BASE_URL}">작품으로 돌아가기 <span aria-hidden="true">↗</span></a>
   </header>
   <main>
-    <section class="intro"><p class="eyebrow">LITTLE NOTES, SHARED MOMENTS</p><h1>여기, 다녀간 마음.</h1><p>어떤 하루였나요? 작은 인사도, 긴 이야기도 좋아요.<br>당신의 한마디를 이곳에 붙여주세요.</p></section>
+    <section class="intro">
+      <div class="orbit orbit-one" aria-hidden="true"></div><div class="orbit orbit-two" aria-hidden="true"></div>
+      <span class="dream-spark spark-one" aria-hidden="true">✧</span><span class="dream-spark spark-two" aria-hidden="true">✦</span><span class="dream-spark spark-three" aria-hidden="true">✧</span>
+      <span class="dream-heart" aria-hidden="true">♡</span>
+      <p class="eyebrow"><span aria-hidden="true">✳</span> A TINY CORNER OF OUR UNIVERSE</p>
+      <h1>Dream <em>diary</em><span class="title-star" aria-hidden="true">✶</span><span class="sr-only">방명록</span></h1>
+      <p class="intro-copy">꿈에서 만난 것처럼, 우연히 여기에.<br>오늘의 기분을 살짝 남겨줘 <span aria-hidden="true">♡</span></p>
+      <span class="hero-sticker">you were here! <span aria-hidden="true">↗</span></span>
+      <div class="dream-strip" aria-hidden="true"><span>˚ ༘♡ little messages</span><span>made of stardust ✧</span><span>stay a little longer ♡</span></div>
+    </section>
     <div class="guest-layout">
       <aside class="composer">
-        <div class="compose-heading"><span>WRITE A NOTE</span><span aria-hidden="true">↙</span></div>
+        <div class="compose-heading"><span><i aria-hidden="true">♡</i> new_message.txt</span><span class="window-dots" aria-hidden="true">— □ ×</span></div>
         <form id="guest-form">
           <fieldset id="write-fields" disabled>
-            <label for="guest-name">이름 <span>또는 별명</span></label>
-            <input id="guest-name" name="author" maxlength="30" required autocomplete="nickname" placeholder="어떤 이름으로 남길까요?" />
-            <label for="guest-message">하고 싶은 말</label>
-            <textarea id="guest-message" name="message" rows="7" maxlength="500" required placeholder="여기에 마음을 적어주세요…"></textarea>
+            <label for="guest-name">from. <span>이름 또는 별명</span></label>
+            <input id="guest-name" name="author" maxlength="30" required autocomplete="nickname" placeholder="너의 이름은?" />
+            <label for="guest-message">dear diary, <span>하고 싶은 말</span></label>
+            <textarea id="guest-message" name="message" rows="7" maxlength="500" required placeholder="오늘의 조각을 여기에… ♡"></textarea>
             <div class="message-count"><span>모두에게 공개되는 글이에요.</span><span id="char-count">0 / 500</span></div>
             <fieldset class="color-picker"><legend>포스트잇 색상</legend>${colors.map((color, i) => `<label class="swatch" style="--swatch:var(--${color})"><input type="radio" name="color" value="${color}" ${i === 0 ? 'checked' : ''}/><span title="${colorNames[i]}"><span class="sr-only">${colorNames[i]}</span></span></label>`).join('')}</fieldset>
-            <button class="submit-button" type="submit">작성하기 <span aria-hidden="true">↗</span></button>
+            <button class="submit-button" type="submit">작성하기 <span aria-hidden="true">send with love ↗</span></button>
           </fieldset>
           <p id="form-status" role="status" aria-live="polite"></p>
         </form>
-        <p class="compose-foot">잠깐의 방문이, 오래 남는 인사가 되도록.</p>
+        <p class="compose-foot">₊˚⊹ a little note, a little magic ⊹˚₊</p>
       </aside>
       <section class="board-section" aria-labelledby="board-title">
-        <div class="board-heading"><h2 id="board-title">우리의 방명록 <span id="note-count">0</span></h2><div class="board-tools"><span id="connection-status" role="status">연결 중</span><button id="refresh" type="button">새로고침</button></div></div>
+        <div class="board-heading"><h2 id="board-title"><span class="board-star" aria-hidden="true">✧</span> our little notes <span id="note-count">0</span></h2><div class="board-tools"><span id="connection-status" role="status">연결 중</span><button id="refresh" type="button">새로고침 ↻</button></div></div>
         <p id="board-status" role="status" aria-live="polite">방명록을 불러오고 있어요.</p>
         <div id="note-board" class="note-board" aria-busy="true"></div>
         <button id="load-more" class="load-more" type="button" hidden>이전 방명록 더 보기 ↓</button>
       </section>
     </div>
-  </main><footer>INTERACTIVE LAB <span>조금씩 모여, 하나의 풍경.</span></footer>
+  </main><footer>INTERACTIVE LAB <span>see you in another dream ♡</span><span>✧ DREAM DIARY CLUB</span></footer>
 `
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id)! as T
