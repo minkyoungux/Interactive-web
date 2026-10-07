@@ -50,6 +50,7 @@ app.innerHTML = `
         `).join('')}
       </nav>
 
+      <a class="guestbook-link" href="${import.meta.env.BASE_URL}guestbook.html">방명록 <span aria-hidden="true">↗</span></a>
       <a class="open-example" id="open-example" href="${import.meta.env.BASE_URL}anyma.html" target="_blank" rel="noopener" aria-label="현재 예제를 새 창에서 열기">
         <span>OPEN</span><b aria-hidden="true">↗</b>
       </a>

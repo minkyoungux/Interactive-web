@@ -17,6 +17,7 @@ export default defineConfig(({ command, isPreview }) => ({
     rollupOptions: {
       input: {
         main: 'index.html',
+        guestbook: 'guestbook.html',
         anyma: 'anyma.html',
         game: 'game.html',
         claw: 'claw.html',

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^1.0.1",
+    "@supabase/supabase-js": "^2.117.2",
     "cannon-es": "^0.20.0",
     "html2canvas": "^1.4.1",
     "three": "^0.185.1"
