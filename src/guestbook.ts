@@ -8,6 +8,8 @@ import { mountPlaza } from './guestbook-plaza'
 import { mountPaperTouch } from './guestbook-touch'
 import { mountStardust } from './guestbook-stardust'
 import { mountMusic } from './guestbook-music'
+import { mountDailyCat } from './guestbook-cat'
+import { mountNostalgia } from './guestbook-nostalgia'
 
 const colors = ['butter', 'rose', 'mint', 'sky', 'lavender'] as const
 const colorNames = ['버터 옐로', '로즈 핑크', '민트', '하늘색', '라벤더']
@@ -25,16 +27,16 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       <div class="planet" aria-hidden="true"><span>✦</span></div>
       <span class="desktop-star star-one" aria-hidden="true">✦</span><span class="desktop-star star-two" aria-hidden="true">✧</span>
       <div class="hero-copy"><p class="eyebrow">★ WELCOME TO MY LITTLE HOMEPAGE ★</p>
-      <h1>GUEST<br><span>BOOK</span><em>Club!</em><span class="sr-only">방명록</span></h1>
-      <p class="intro-copy">인터넷 어딘가에서 만난 우리.<br>그냥 가기 없기! 방명록에 흔적 남겨줘 ♡</p>
+      <h1 class="nostalgia-heading">나만의<br><span>비밀기지</span><em>…☆</em><span class="sr-only">방명록</span></h1>
+      <p class="intro-copy">스쳐가는 인연이라도…<br>발자국은 남겨주길。</p>
       <a class="hero-write" href="#guest-name">➜ Click here to leave a note!</a></div>
       <div class="welcome-window"><div class="window-title">Welcome.exe <span class="window-dots" aria-hidden="true">— □ ×</span></div>
         <div class="window-menu" aria-hidden="true">File&nbsp;&nbsp; Edit&nbsp;&nbsp; View&nbsp;&nbsp; Favorites</div>
-        <div class="welcome-screen"><div class="pixel-computer" aria-hidden="true"><div class="monitor"><span>♥</span></div><div class="computer-base"></div></div><b>You've got a visitor!</b><p>작은 인사 한 줄도 환영합니다.</p><span class="online-badge">● YOU ARE NOW CONNECTED</span></div>
-        <div class="window-status">♡ Best viewed with an open heart.</div>
+        <div class="welcome-screen"><div class="pixel-computer" aria-hidden="true"><div class="monitor"><span>♥</span></div><div class="computer-base"></div></div><b>몸은 사무실에…</b><p>영혼은 이미 퇴근했ㄷr…☆</p><span class="online-badge">● ONLINE… BUT NOT WORKING</span></div>
+        <div class="window-status">♡ 월요일… 우리 그만 만날까。</div>
       </div>
       <div class="mini-window" aria-hidden="true"><div class="window-title">My mood today <span>×</span></div><p>100% <span>ONLINE</span></p><div class="progress-blocks"></div></div>
-      <div class="dream-strip"><span>✦ HELLO, WORLD!</span><span>방명록에 오신 것을 환영합니다 ♡</span><span>MAKE YOURSELF AT HOME ✦</span></div>
+      <div class="dream-strip"><span>✦ 퇴근을 기다리는 중…</span><span>우린 월급이라는 별을 따라… 출근한다 ☆</span><span>내 마음은 연차 중 ✦</span></div>
     </section>
     <div class="guest-layout">
       <aside class="composer">
@@ -45,14 +47,14 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
             <input id="guest-name" name="author" maxlength="30" required autocomplete="nickname" placeholder="너의 이름은?" />
             <div id="minimi-maker" class="minimi-maker"></div>
             <label for="guest-message">Message <span>하고 싶은 말</span></label>
-            <textarea id="guest-message" name="message" rows="7" maxlength="500" required placeholder="오늘의 조각을 여기에… ♡"></textarea>
+            <textarea id="guest-message" name="message" rows="7" maxlength="500" required placeholder="악플은 시러… 따뜻한 말만 부탁해 ♡"></textarea>
             <div class="message-count"><span>모두에게 공개되는 글이에요.</span><span id="char-count">0 / 500</span></div>
             <fieldset class="color-picker"><legend>포스트잇 색상</legend>${colors.map((color, i) => `<label class="swatch" style="--swatch:var(--${color})"><input type="radio" name="color" value="${color}" ${i === 0 ? 'checked' : ''}/><span title="${colorNames[i]}"><span class="sr-only">${colorNames[i]}</span></span></label>`).join('')}</fieldset>
-            <button class="submit-button" type="submit">작성하기 <span aria-hidden="true">Send message ➜</span></button>
+            <button class="submit-button" type="submit">흔적 남기기 ˚₊· <span aria-hidden="true">다녀간 너의 조각 ➜</span></button>
           </fieldset>
           <p id="form-status" role="status" aria-live="polite"></p>
         </form>
-        <p class="compose-foot">✉ 보내주신 마음은 소중하게 보관됩니다.</p>
+        <p class="compose-foot">✉ 업무 메일 말고… 네 마음을 보내줘。</p>
       </aside>
       <section class="board-section" aria-labelledby="board-title">
         <section id="minimi-plaza" class="minimi-plaza" aria-label="미니미 광장"></section>
@@ -68,6 +70,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 mountStickers()
 mountStardust()
 mountMusic()
+mountDailyCat()
+mountNostalgia()
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id)! as T
 const form = el<HTMLFormElement>('guest-form')
@@ -255,7 +259,7 @@ form.addEventListener('submit', async event => {
     draftId = undefined
     formStatus.textContent = '마음이 도착했어요. 방명록에 붙였어요!'
   } catch {
-    formStatus.textContent = '저장 여부를 확인하지 못했어요. 입력한 글은 그대로 있으니 다시 작성하기를 눌러주세요.'
+    formStatus.textContent = '저장 여부를 확인하지 못했어요. 입력한 글은 그대로 있으니 다시 흔적 남기기를 눌러주세요.'
   } finally {
     saving = false
     writeFields.disabled = false

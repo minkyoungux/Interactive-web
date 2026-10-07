@@ -77,13 +77,46 @@ const expect = locator => {
     await page.goto(origin + 'guestbook.html')
     await expect(page.locator('.note')).toHaveCount(3)
     await expect(page.locator('#connection-status')).toContainText('실시간 연결')
+    let failCat = false
+    await page.route('https://cataas.com/**', route => failCat ? route.abort() : route.fulfill({
+      contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="140"><rect width="160" height="140" fill="pink"/></svg>',
+    }))
+    await expect(page.locator('.cat-photo img')).toHaveCount(0)
+    await page.locator('.cat-next').click()
+    await expect(page.locator('.cat-photo img')).toHaveCount(1)
+    await expect(page.locator('.cat-status')).toContainText('충전 완료')
+    const firstCat = await page.locator('.cat-photo img').getAttribute('src')
+    failCat = true
+    await page.locator('.cat-next').click()
+    await expect(page.locator('.cat-status')).toContainText('다시 불러볼까요')
+    assert.equal(await page.locator('.cat-photo img').getAttribute('src'), firstCat)
+    failCat = false
+    await page.locator('.cat-next').click()
+    await expect(page.locator('.cat-status')).toContainText('충전 완료')
+    assert.notEqual(await page.locator('.cat-photo img').getAttribute('src'), firstCat)
     await page.route('https://open.spotify.com/embed/**', route => route.fulfill({ contentType: 'text/html', body: '<p>Spotify mock player</p>' }))
+    await page.route('https://open.spotify.com/embed/iframe-api/v1', route => route.fulfill({ contentType: 'application/javascript', body: `
+      window.onSpotifyIframeApiReady({createController(target, options, callback) {
+        const frame = document.createElement('iframe'); frame.src = 'https://open.spotify.com/embed/track/' + options.uri.split(':').pop(); target.replaceWith(frame);
+        const listeners = {}; let paused = true;
+        const update = () => listeners.playback_update?.({data:{isPaused:paused,isBuffering:false,position:100,duration:10000}});
+        window.mockSpotifyToggle = () => {paused=!paused;update()};
+        callback({destroy(){frame.remove()},addListener(name,fn){listeners[name]=fn;if(name==='ready')setTimeout(fn,0)}});
+      }});
+    ` }))
     await expect(page.locator('.bgm-player iframe')).toHaveCount(0)
     for (const [i, id] of ['1aKvZDoLGkNMxoRYgkckZG','7Jpb9OejYYIwsBIVQwceRy','3r8RuvgbX9s7ammBn07D3W'].entries()) {
       await page.locator(`[data-song="${i}"]`).click()
       await expect(page.locator('.bgm-player iframe')).toHaveCount(1)
       assert.ok((await page.locator('.bgm-player iframe').getAttribute('src')).includes(id))
       assert.equal(await page.locator('.bgm-link').getAttribute('href'), `https://open.spotify.com/track/${id}`)
+      await expect(page.locator('.bgm-toggle')).toHaveCount(0)
+      await page.evaluate(() => window.mockSpotifyToggle())
+      await expect(page.locator('.bgm-eq-label')).toContainText('ON AIR')
+      assert.equal(await page.locator('.bgm-disc').evaluate(el => getComputedStyle(el).animationPlayState), 'running')
+      await page.evaluate(() => window.mockSpotifyToggle())
+      await expect(page.locator('.bgm-eq-label')).toContainText('STANDBY')
+      assert.equal(await page.locator('.bgm-disc').evaluate(el => getComputedStyle(el).animationPlayState), 'paused')
     }
     await page.locator('.bgm-close').click()
     await expect(page.locator('.bgm-player iframe')).toHaveCount(0)

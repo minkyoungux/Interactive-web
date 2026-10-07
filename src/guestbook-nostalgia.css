@@ -1,0 +1,16 @@
+h1.nostalgia-heading { font-size: clamp(38px,5.5vw,70px); line-height: 1.2; letter-spacing: -3px; }
+.composer:has(.fog-window) { position: static; }
+h1.nostalgia-heading em { right: -25px; bottom: -24px; }
+.today-mood select { display: block; width: calc(100% - 12px); margin: 9px 6px; padding: 5px; border: 2px inset #eee; background: #fff5fd; color: #614b79; font: 12px Tahoma,sans-serif; }
+.mini-window.today-mood .mood-message { margin: 5px 8px 10px; font: 10px/1.6 Tahoma,sans-serif; color: #58476d; word-break: keep-all; }
+.fog-window { margin: 16px 9px 10px; padding: 3px; background: #c7c5d1; box-shadow: var(--outset); }
+.fog-window .window-title { font: 10px Tahoma,sans-serif; background: linear-gradient(90deg,#8578ae,#b7c8e0); }
+.fog-glass { position: relative; height: 190px; overflow: hidden; margin: 5px; box-shadow: var(--inset); background: radial-gradient(ellipse at 20% 25%,#fff8 0,transparent 50%),linear-gradient(145deg,#a9c5dc,#a6a0c3,#e3b8d1); touch-action: pan-y; }
+.fog-secret { margin: 0; height: 100%; display: flex; flex-direction: column; justify-content: center; text-align: center; gap: 12px; font: italic 19px/1.6 Georgia,serif; color: #50456c; }
+.fog-secret small { font: 10px/1.8 Tahoma,sans-serif; }
+.fog-glass canvas { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity 1.5s; cursor: crosshair; }
+.fog-glass canvas.refogging { opacity: 0; transition: none; }
+.fog-hint { margin: 8px 5px; font: 10px/1.6 Tahoma,sans-serif; color: #625071; }
+.fog-reveal { margin: 0 5px 7px; padding: 5px 8px; background: #ede3f3; border: 0; box-shadow: var(--outset); font: 10px Tahoma,sans-serif; color: #59436e; cursor: pointer; }
+.fog-accessible { margin: 5px; font: 11px/1.7 Tahoma,sans-serif; }
+@media(prefers-reduced-motion:reduce) { .fog-glass canvas { transition: none; } }
